@@ -60,7 +60,7 @@
 }
 
 \references{
-Cristina Amado and Timo Ter\"asvirta (2013) Modelling volatility by variance decomposition, Journal of Econometrics 175, 142-153. Cristina Amado and Timo Ter\"asvirta (2014) Modelling changes in the unconditional variance of long stock return series, Journal of Empirical Finance 25, 15-35. 
+Cristina Amado and Timo Ter\"{a}svirta (2013) Modelling volatility by variance decomposition, Journal of Econometrics 175, 142-153. Cristina Amado and Timo Ter\"{a}svirta (2014) Modelling changes in the unconditional variance of long stock return series, Journal of Empirical Finance 25, 15-35. 
 }
 
 \author{Susana Campos-Martins}
@@ -98,7 +98,7 @@ vcov(yEst)
 predict(yEst)
 }
 
-\keyword{Time-Varying Parameter Models}
+\keyword{Time Varying Parameter Models}
 \keyword{Nonlinear Time Series}
 \keyword{Econometrics}
 \keyword{Financial Econometrics}

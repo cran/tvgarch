@@ -10,9 +10,9 @@ tvgarchTest <- function (y, xtv = NULL, alpha = 0.05, trace = TRUE)
   y2 <- y^2
   if (!is.null(xtv)) xtv <- matrix(xtv[-1], n, 1)
   if (is.null(xtv))  xtv <- matrix((1:n)/n, n, 1)
-  if (trace ==TRUE) {
+  if (trace == TRUE) {
     cat("\n")
-    cat("Test Results for GARCH(1,1) vs multiplicative TV(1)-GARCH(1,1): \n")
+    cat("Test Results for GARCH(1,1) vs TV(1)-GARCH(1,1) \n\n")
   }
   z <- as.numeric(y2/h-1)
   v <- cbind(1, y2, h)
@@ -107,9 +107,10 @@ tvgarchTest <- function (y, xtv = NULL, alpha = 0.05, trace = TRUE)
     warning("The long-term conditional variance is constant.")
   }
   if (trace ==TRUE) {
-    cat("Non-Robust \n")
+    cat("Non-Robust \n\n")
     print(mat)
-    cat("Robust \n")
+    cat("\n")
+    cat("Robust \n\n")
     print(matRob)
   }
   return(order.g)  

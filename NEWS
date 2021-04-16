@@ -1,4 +1,14 @@
-Version 1.0 (5 August 2020):
+Version 2.0 (15 April 2020):
+============================
+
+Second version.
+
+
+New functions have been added for simulation and estimation of (not only univariate but also) multivariate TV-GARCH-X models.
+
+
+
+Version 1.0 (28 January 2021):
 ============================
 
 First version.

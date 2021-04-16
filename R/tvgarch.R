@@ -2,6 +2,7 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL, xreg = NULL
                      initial.values = list(), opt = 2, turbo = FALSE, trace = FALSE)
 {
   n <- length(y)
+  if (order.g == 0) order.g <- NULL
   npar.h <- 1 + sum(order.h)
   if (!is.null(xreg)) {
     xreg <- as.matrix(xreg)
@@ -15,8 +16,7 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL, xreg = NULL
       if (is.null(colnames(xtv))) colnames(xtv) <- "xtv"
     }
     if (is.null(xtv)) {
-      xtv <- y
-      xtv[1:n] <- (1:n)/n
+      xtv <- matrix((1:n)/n, n, 1)
       colnames(xtv) <- "time"
     }
     s <- length(order.g)
@@ -37,7 +37,6 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL, xreg = NULL
       for (i in 1:s) {
         if (order.g[i] == 1) location <- c(location, mean(xtv))
         if (order.g[i] > 1) location <- c(location, seq(from = min(xtv)+0.5*sd(xtv), to = max(xtv)-0.5*sd(xtv), by = (max(xtv)-min(xtv)-sd(xtv))/(order.g[i]-1)))
-
       }
     }
     else location <- initial.values$location
@@ -208,8 +207,7 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL, xreg = NULL
       '
         Estimating GJR-GARCH-X parameters:
       '
-      # iter.fit.h <- garchx(y = phi, order = order.h, xreg = xreg, initial.values = ini.par.h)
-      iter.fit.h <- garchx(y = phi, order = order.h, xreg = xreg)
+      iter.fit.h <- garchx(y = phi, order = order.h, xreg = xreg, initial.values = par.hat.h)
       h <- garchxRecursion(pars = as.numeric(iter.fit.h$par), aux = iter.fit.h)
       if (iter > 1) conv.h <- max(abs(par.hat.h-iter.fit.h$par))
       par.hat.h <- iter.fit.h$par
@@ -255,7 +253,7 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL, xreg = NULL
       colnames(vcov.g) <- names.g
       jac.g <- jacobian(func = tvObj, x = iter.fit.g$par, fixed.par.g = par.hat0.g, xtv = xtv, opt = opt, order.g = order.g, fixed.h = h, y = y, iter0 = FALSE, flag = 0)
       J.g <- crossprod(jac.g)  
-      H.g <- hessian(func = tvObj, x = iter.fit.g$par, fixed.par.g = par.hat0.g, xtv = xtv, opt = opt, order.g = order.g, fixed.h = h, y = y, iter0 = FALSE, flag = 1)
+      H.g <-  optimHess(par = iter.fit.g$par, fn = tvObj, fixed.par.g = par.hat0.g, xtv = xtv, opt = opt, order.g = order.g, fixed.h = h, y = y, iter0 = FALSE, flag = 1)
       vcov.iter <- solve(-H.g) %*% J.g %*% solve(-H.g)
       vcov.g[c(2:(s+1),(2*s+2):npar.g),c(2:(s+1),(2*s+2):npar.g)] <- vcov.iter
       robse.par.g <- sqrt(diag(vcov.g))
@@ -304,10 +302,6 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL, xreg = NULL
   if (is.null(order.g)){
     results <- iter.fit.h
     results$order.g <- order.g
-  }
-  if (trace == TRUE){
-    if (!is.null(order.g)) print.tvgarch(results)
-    if (is.null(order.g)) print.garchx(results)
   }
   return(results)
 } 

@@ -39,7 +39,7 @@ predict.tvgarch <- function (object, n.ahead = 10, newxtv = NULL, newxreg = NULL
     result <- as.vector(rowMeans(predictions.h)*predictions.g)
     if (verbose == TRUE) {
       result <- cbind(result, as.vector(predictions.g), predictions.h)
-      colnames(result) <- c("sigma2", "sim.g", paste("sim.h", 1:NCOL(predictions.h), sep = ""))
+      colnames(result) <- c("sigma2", "g", paste("h", 1:NCOL(predictions.h), sep = ""))
     }
     if (is.null(newindex)) {
       newindex <- 1:n.ahead

@@ -22,18 +22,18 @@ tvgarchSim(n, order.g = 1, order.h = c(1,1,0),
   \item{size}{\code{NULL} or numeric vector with the values of the size coefficients}
   \item{speed}{\code{NULL} or numeric vector with the values of the speed coefficients}
   \item{location}{\code{NULL} or numeric vector with the values of the location coefficients}
-  \item{xtv}{\code{NULL} or numeric vector, time-series or zoo object to include as the transition variable in the TV component. If \code{NULL}, calendar time, scaled between 0 and 1, is used as the transition variable}
-  \item{opt}{integer indicating whether the speed parameter in the TV component should be scaled. If 0, no scaling; if 1, speed/sd(xtv); if 2, exp(speed).}
+  \item{xtv}{\code{NULL} or numeric vector, time series or zoo object to include as the transition variable in the TV component. If \code{NULL}, calendar time, scaled between 0 and 1, is used as the transition variable}
+  \item{opt}{integer indicating whether the speed parameter in the TV component should be scaled. If 0, no scaling; if 1, speed/sd(xtv); if 2, exp(speed)}
   \item{intercept.h}{numeric with the value of the intercept in the GARCH-X component}
   \item{arch}{\code{NULL} or numeric vector with the values of the ARCH-coefficients}
   \item{garch}{\code{NULL} or numeric vector with the values of the GARCH-coefficients}
   \item{asym}{\code{NULL} or numeric vector with the values of the asymmetry-coefficients}
   \item{xreg}{\code{NULL} or numeric vector with the values of the X-term}
-  \item{verbose}{\code{logical}, if \code{TRUE}, the conditional variance and innovations are also returned.}
+  \item{verbose}{\code{logical}, if \code{TRUE}, the conditional variance and innovations are also returned}
   \item{innovations}{\code{NULL} or numeric vector with the innovations. If \code{NULL}, then standard normal innovations are generated with \code{\link{rnorm}}}
 }
 
-\value{A numeric vector or matrix with the simulated values.}
+\value{A numeric vector or matrix with the simulated values}
 
 \author{Susana Campos-Martins}
 
@@ -60,7 +60,7 @@ ySim3 <- tvgarchSim(n = 1500, order.g = NULL)
 ySim4 <- tvgarchSim(n = 1500, order.h = c(1,1,1), asym = 0.025, xreg = ySim3^2)
 }
 
-\keyword{Time-Varying Parameter Models}
+\keyword{Time Varying Parameter Models}
 \keyword{Nonlinear Time Series}
 \keyword{Econometrics}
 \keyword{Financial Econometrics}

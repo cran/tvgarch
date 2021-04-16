@@ -1,22 +1,40 @@
+
 ## import:
+
+import("zoo")
 import("garchx")
-import("hier.part")
 import("matrixStats")
 import("numDeriv")
-import("zoo")
+import("hier.part")
 
-importFrom("stats", "lm", "pchisq", "cor", "sd", "coef", "dnorm", "fitted", "logLik", "constrOptim", "nobs", "pnorm", "quantile", "residuals", "rnorm", "runif", "predict", "vcov")
-importFrom("utils", "toLatex", "tail")
+importFrom(
+
+	"stats", "lm", "pchisq", "cor", "sd", "coef", "dnorm",
+	"fitted", "logLik", "constrOptim", "nobs", "pnorm", "vcov",
+	"quantile", "residuals", "rnorm", "runif", "predict", "optimHess"
+)
+
+importFrom(
+	
+	"utils", "toLatex", "tail"
+)
+
 
 export(
 
-  # main functions: 
-  "tv", "tvgarchSim", "tvgarchTest", "tvObj", "garchObj", "tvgarch", 
+	# main functions: 
+	"tv", "tvgarchSim", "tvgarchTest", "tvObj", "garchObj", "tvgarch", 
+	"mtvgarchSim", "mtvgarch", 
 
-  # extraction functions: 
-  "coef.tvgarch", "fitted.tvgarch", "logLik.tvgarch", "nobs.tvgarch", "predict.tvgarch", "print.tvgarch", "quantile.tvgarch", "residuals.tvgarch", "toLatex.tvgarch",
-  "vcov.tvgarch"
 
+	# extraction functions: 
+	"coef.tvgarch", "fitted.tvgarch", "logLik.tvgarch", "nobs.tvgarch", 
+	"predict.tvgarch", "print.tvgarch", "quantile.tvgarch", 
+	"residuals.tvgarch", "toLatex.tvgarch", "vcov.tvgarch",
+	"coef.mtvgarch", "fitted.mtvgarch", "logLik.mtvgarch", 
+	"nobs.mtvgarch", "predict.mtvgarch", "print.mtvgarch", 
+	"quantile.mtvgarch", "residuals.mtvgarch", "toLatex.mtvgarch",
+	"vcov.mtvgarch"
 )
     
 # methods for class tvgarch:
@@ -31,3 +49,16 @@ S3method("quantile", "tvgarch")
 S3method("residuals", "tvgarch")
 S3method("toLatex", "tvgarch")
 S3method("vcov", "tvgarch")
+
+# methods for class mtvgarch:
+
+S3method("coef", "mtvgarch")
+S3method("fitted", "mtvgarch")
+S3method("logLik", "mtvgarch")
+S3method("nobs", "mtvgarch")
+S3method("predict", "mtvgarch")
+S3method("print", "mtvgarch")
+S3method("quantile", "mtvgarch")
+S3method("residuals", "mtvgarch")
+S3method("toLatex", "mtvgarch")
+S3method("vcov", "mtvgarch")

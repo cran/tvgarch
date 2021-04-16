@@ -12,8 +12,8 @@ tvgarchTest(y, xtv = NULL, alpha = 0.05, trace = TRUE)
 }
 
 \arguments{
-\item{y}{numeric vector, time-series or \code{\link{zoo}} object}
-\item{xtv}{\code{NULL} or numeric vector, time-series or zoo object to include as the transition variable in the TV component. If \code{NULL}, calendar time, scaled between 0 and 1, is used as the transition variable}
+\item{y}{numeric vector, time series or \code{\link{zoo}} object}
+\item{xtv}{\code{NULL} or numeric vector, time series or zoo object to include as the transition variable in the TV component. If \code{NULL}, calendar time, scaled between 0 and 1, is used as the transition variable}
 \item{alpha}{the significance level}
 \item{trace}{logical, if \code{TRUE} all output is printed}
 }
@@ -22,7 +22,7 @@ tvgarchTest(y, xtv = NULL, alpha = 0.05, trace = TRUE)
 The number of location parameters in the single transition function
 }
 
-\references{Cristina Amado and Timo Ter\"asvirta (2017) Specification and testing of multiplicative time-varying GARCH models with applications, Econometric Reviews 36:4, 421-446.}
+\references{Cristina Amado and Timo Ter\"{a}svirta (2017) Specification and testing of multiplicative time varying GARCH models with applications, Econometric Reviews 36:4, 421-446.}
 
 \author{Susana Campos-Martins}
 
@@ -45,7 +45,7 @@ orderG1 <- tvgarchTest(y = ySim)
 yEst <- tvgarch(y = ySim, order.g = orderG1)
 }
 
-\keyword{Time-Varying Parameter Models}
+\keyword{Time Varying Parameter Models}
 \keyword{Nonlinear Time Series}
 \keyword{Econometrics}
 \keyword{Financial Econometrics}

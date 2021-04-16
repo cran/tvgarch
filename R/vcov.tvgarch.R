@@ -9,8 +9,8 @@ vcov.tvgarch <- function(object, spec = NULL, ...)
         jac.g <- jacobian(func = tvObj, x = object$par.g[-c(1,(1+s+1):(1+2*s))], fixed.par.g = object$par.g[c(1,(1+s+1):(1+2*s))], xtv = object$xtv, opt = object$opt, order.g = object$order.g, 
                           fixed.h = object$h, y = object$y, iter0 = FALSE, flag = 0)
         J.g <- crossprod(jac.g)  
-        H.g <- hessian(func = tvObj, x = object$par.g[-c(1,(1+s+1):(1+2*s))], fixed.par.g = object$par.g[c(1,(1+s+1):(1+2*s))], xtv = object$xtv, opt = object$opt, order.g = object$order.g, 
-                        fixed.h = object$h, y = object$y, iter0 = FALSE, flag = 1)
+        H.g <-  optimHess(par = object$par.g[-c(1,(1+s+1):(1+2*s))], fn = tvObj, fixed.par.g = object$par.g[c(1,(1+s+1):(1+2*s))], xtv = object$xtv, opt = object$opt, order.g = object$order.g, 
+                          fixed.h = object$h, y = object$y, iter0 = FALSE, flag = 1)
         vcov.g <- solve(-H.g) %*% J.g %*% solve(-H.g)
         object$vcov.g[c(2:(s+1),(2*s+2):npar.g),c(2:(s+1),(2*s+2):npar.g)] <- vcov.g
         rownames(object$vcov.g) <- object$names.g
