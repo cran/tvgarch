@@ -1,9 +1,9 @@
 mtvgarchSim <- function (n, m = 2, order.g = c(1,1), order.h = c(1,1,0, 1,1,0), order.x = NULL, 
-                         intercept.g = c(1.2,1), size = c(0.8,1), speed = c(1.5,2), 
+                         intercept.g = c(1.2,1), size = c(3,5), speed = c(10,25), 
                          location = c(0.5,0.8), intercept.h = c(0.2,0.3), arch = c(0.10,0.05), 
                          garch = c(0.80,0.90), asym = NULL, xtv = NULL, xreg = NULL, par.xreg = NULL, 
                          R = c(1,0.6,0.6,1), dcc = FALSE, par.dcc = NULL, 
-                         opt = 2, verbose = FALSE, innovations = NULL)
+                         opt = 0, verbose = FALSE, innovations = NULL)
 {
   if(m == 1) stop("For univariate processes use tvgarchSim.")
   names.ID <- paste("y", 1:m, sep = "")
@@ -46,16 +46,22 @@ mtvgarchSim <- function (n, m = 2, order.g = c(1,1), order.h = c(1,1,0, 1,1,0), 
   if (!is.null(order.x)) {
     if (is.null(xreg)) {
       par.h <- cbind(par.h, matrix(NA, m, m))
-      par.xreg <- matrix(par.xreg, m, m, byrow = TRUE)
       order.x <- matrix(order.x, m, m, byrow = TRUE)
       diag(order.x) <- 0
+      # par.xreg <- matrix(par.xreg, m, m, byrow = TRUE) 
+      par.xreg2 <- par.xreg
+      par.xreg <- matrix(0, m, m, byrow = TRUE)  # 20 July 2021
+      par.xreg[which(order.x == 1)] <- par.xreg2  # 20 July 2021
       names.h <- c(names.h, paste("xreg", 1:m, sep = ""))  
     } 
     if (!is.null(xreg)) {
       par.h <- cbind(par.h, matrix(NA, m, ncol(xreg)))
       if (length(order.x) != m*ncol(xreg)) warning("The number of par.xreg should be equal to m*ncol(xreg).")
-      par.xreg <- matrix(par.xreg, m, ncol(xreg), byrow = TRUE)
       order.x <- matrix(order.x, m, ncol(xreg), byrow = TRUE)
+      # par.xreg <- matrix(par.xreg, m, m, byrow = TRUE) 
+      par.xreg2 <- par.xreg
+      par.xreg <- matrix(0, m, m, byrow = TRUE)  # 20 July 2021
+      par.xreg[which(order.x == 1)] <- par.xreg2  # 20 July 2021
       names.h <- c(names.h, paste("xreg", 1:ncol(xreg), sep = ""))  
     }
   }

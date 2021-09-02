@@ -3,7 +3,6 @@
 
 import("zoo")
 import("garchx")
-import("matrixStats")
 import("numDeriv")
 import("hier.part")
 

@@ -9,31 +9,31 @@ Simulate from a univariate multiplicative TV(s)-GARCH(p,q,r)-X model.
 
 \usage{
 tvgarchSim(n, order.g = 1, order.h = c(1,1,0),
-           intercept.g = 1.2, size = 0.8, speed = 2, location = 0.5, xtv = NULL, 
+           intercept.g = 1.2, size = 5, speed = 25, location = 0.5, xtv = NULL, 
            intercept.h = 0.2, arch = 0.1, garch = 0.8, asym = NULL, xreg = NULL,
-           opt = 2, verbose = FALSE, innovations = NULL)
+           opt = 0, verbose = FALSE, innovations = NULL)
 }
 
 \arguments{
-  \item{n}{integer}
-  \item{order.g}{integer vector of length s indicating the number of locations in each transition function of the TV component}
-  \item{order.h}{integer vector of the form c(p,q,r). The first entry controls the GARCH order, the second the ARCH order and the third the asymmetry order of the GARCH-X component}
-  \item{intercept.g}{\code{NULL} or numeric with the value of the intercept in the TV component}
-  \item{size}{\code{NULL} or numeric vector with the values of the size coefficients}
-  \item{speed}{\code{NULL} or numeric vector with the values of the speed coefficients}
-  \item{location}{\code{NULL} or numeric vector with the values of the location coefficients}
-  \item{xtv}{\code{NULL} or numeric vector, time series or zoo object to include as the transition variable in the TV component. If \code{NULL}, calendar time, scaled between 0 and 1, is used as the transition variable}
-  \item{opt}{integer indicating whether the speed parameter in the TV component should be scaled. If 0, no scaling; if 1, speed/sd(xtv); if 2, exp(speed)}
-  \item{intercept.h}{numeric with the value of the intercept in the GARCH-X component}
-  \item{arch}{\code{NULL} or numeric vector with the values of the ARCH-coefficients}
-  \item{garch}{\code{NULL} or numeric vector with the values of the GARCH-coefficients}
-  \item{asym}{\code{NULL} or numeric vector with the values of the asymmetry-coefficients}
-  \item{xreg}{\code{NULL} or numeric vector with the values of the X-term}
-  \item{verbose}{\code{logical}, if \code{TRUE}, the conditional variance and innovations are also returned}
-  \item{innovations}{\code{NULL} or numeric vector with the innovations. If \code{NULL}, then standard normal innovations are generated with \code{\link{rnorm}}}
+  \item{n}{\code{integer}.}
+  \item{order.g}{\code{integer} \code{vector} of length s indicating the number of locations in each transition function of the TV component.}
+  \item{order.h}{\code{integer} \code{vector} of the form c(p,q,r). The first entry controls the GARCH order, the second the ARCH order and the third the asymmetry order of the GARCH-X component.}
+  \item{intercept.g}{\code{NULL} or numeric with the value of the intercept in the TV component.}
+  \item{size}{\code{NULL} or numeric \code{vector} with the values of the size coefficients.}
+  \item{speed}{\code{NULL} or numeric \code{vector} with the values of the \code{speed} coefficients.}
+  \item{location}{\code{NULL} or numeric \code{vector} with the values of the location coefficients.}
+  \item{xtv}{\code{NULL} or numeric \code{vector}, time series or zoo object to include as the transition variable in the TV component. If \code{NULL}, calendar time, scaled between 0 and 1, is used as the transition variable.}
+  \item{opt}{\code{integer} indicating whether the \code{speed} parameter in the TV component should be scaled. If 0, no scaling; if 1, \code{speed}/sd(\code{xtv}); if 2, exp(\code{speed}).}
+  \item{intercept.h}{numeric with the value of the intercept in the GARCH-X component.}
+  \item{arch}{\code{NULL} or numeric \code{vector} with the values of the ARCH-coefficients.}
+  \item{garch}{\code{NULL} or numeric \code{vector} with the values of the GARCH-coefficients.}
+  \item{asym}{\code{NULL} or numeric \code{vector} with the values of the asymmetry-coefficients.}
+  \item{xreg}{\code{NULL} or numeric \code{vector} with the values of the X-term.}
+  \item{verbose}{\code{logical}, if \code{TRUE}, the conditional variance and innovations are also returned.}
+  \item{innovations}{\code{NULL} or numeric \code{vector} with the innovations. If \code{NULL}, then standard normal innovations are generated with \code{\link{rnorm}}.}
 }
 
-\value{A numeric vector or matrix with the simulated values}
+\value{A numeric \code{vector} or \code{matrix} with the simulated values.}
 
 \author{Susana Campos-Martins}
 

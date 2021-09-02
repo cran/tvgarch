@@ -12,14 +12,14 @@ Auxiliary functions used in the estimation of the multivariate TV(s)-GARCH(p,q,r
 }
 
 \arguments{
-  \item{par.dcc}{numeric vector containing the ARCH- and GARCH-type coefficients in the dynamic conditional correlations}
-  \item{z}{matrix of standardized residuals}
-  \item{sigma2}{matrix of conditional variances}
-  \item{flag}{integer. If 0, returns a numeric vector with the values of the objective function; if 1 returns the the value of the objective function; if 2, returns the fitted variance components}
+  \item{par.dcc}{numeric \code{vector} containing the ARCH- and GARCH-type coefficients in the dynamic conditional correlations.}
+  \item{z}{\code{matrix} of standardized residuals.}
+  \item{sigma2}{\code{matrix} of conditional variances.}
+  \item{flag}{\code{integer}. If 0, returns a numeric vector with the values of the objective function; if 1 returns the the value of the objective function; if 2, returns the fitted variance components.}
 }
 
 \value{
-The values of the objective function or fitted dynamic conditional correlations
+The values of the objective function or fitted dynamic conditional correlations.
 }
 
 \author{Susana Campos-Martins}

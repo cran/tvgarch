@@ -1,29 +1,29 @@
-mtvgarch <-  function (y, order.g = c(1, 1), order.h = c(1,1,0, 1,1,0), order.x = NULL,
+mtvgarch <-  function (y, order.g = c(1, 1), order.h = NULL, order.x = NULL,
                        initial.values = list(), xtv = NULL, xreg = NULL, opt = 2, dcc = FALSE, 
                        turbo = TRUE, trace = FALSE)
 {
     y <- as.matrix(y)
+    y.index <- index(y)
     n <- nrow(y)
     m <- ncol(y)
     if (is.null(colnames(y)) ) colnames(y) <- paste("y", 1:m, sep = "")
     names.y <- colnames(y)
+    if (!any(order.g != 0)) order.g <- NULL
     if (!is.null(order.g)) {
       if (!is.null(xtv)) {
         xtv <- matrix(xtv, n, 1)
         if (is.null(colnames(xtv))) 
-          colnames(xtv) <- "xtv1"
-      }
-      if (is.null(xtv)) {
-        xtv <- as.matrix((1:n)/n)
-        colnames(xtv) <- "time"
+          colnames(xtv) <- "xtv"
       }
       order.g <- as.matrix(order.g)
       max.s <- ncol(order.g)
+      max.c <- 0
       names.g <- c("intercept.g", paste("size", 1:max.s, sep = ""), paste("speed", 1:max.s, sep = ""))
       for(i in 1:max.s) {
         names.g <- c(names.g, paste("location", i, 1:max(order.g[,i]), sep = ""))
+        max.c <- max.c + max(order.g[,i])
       }
-      npar.g <- 1 + 2 * max.s + sum(matrixStats::colMaxs(order.g))
+      npar.g <- 1 + 2 * max.s + max.c
       par.g <- matrix(NA, m, npar.g)
       colnames(par.g) <- names.g
       rownames(par.g) <- names.y
@@ -33,6 +33,7 @@ mtvgarch <-  function (y, order.g = c(1, 1), order.h = c(1,1,0, 1,1,0), order.x 
       par.g <- NULL
       se.g <- par.g
     } 
+    if (is.null(order.h)) order.h <- rep(c(1,1,0), m)
     order.h <- matrix(order.h, m, 3, byrow = TRUE)
     max.p <- max(order.h[,1])
     max.q <- max(order.h[,2])
@@ -92,7 +93,7 @@ mtvgarch <-  function (y, order.g = c(1, 1), order.h = c(1,1,0, 1,1,0), order.x 
     '
     nx <- 0
     if (is.null(order.g)) {
-      order.g.i <- NULL
+      order.g.i <- 0 # order.g.i <- NULL bug fixed 
       intercept.g.i <- NULL
       size.i <- NULL
       speed.i <- NULL
@@ -114,8 +115,8 @@ mtvgarch <-  function (y, order.g = c(1, 1), order.h = c(1,1,0, 1,1,0), order.x 
           par.g.i <- c(intercept.g.i, size.i, speed.i, location.i)
           order.g.i <- order.g[i,1:s.i]
         }
-        else{
-          order.g.i <- NULL
+        else {
+          order.g.i <- 0   # order.g.i <- NULL bug fixed 
           intercept.g.i <- NULL
           size.i <- NULL
           speed.i <- NULL
@@ -320,7 +321,6 @@ mtvgarch <-  function (y, order.g = c(1, 1), order.h = c(1,1,0, 1,1,0), order.x 
               se.h[i,(1+max.q+max.p+max.r+which(order.x[i,] == 1))] <- tvgarch.i$se.h[(1+sum(order.h[i,])+1):(1+sum(order.h[i,])+sum(order.x[i,]))]
             }
           }
-          # third condition: xreg is mtv-garch and so estimates need to be updated
         }
         phi2 <- rbind(colMeans(y^2/g), (y^2/g)[-n,])
         colnames(phi2) <- names.x
@@ -345,7 +345,7 @@ mtvgarch <-  function (y, order.g = c(1, 1), order.h = c(1,1,0, 1,1,0), order.x 
     z <- y/sqrt(sigma2)
     R <- cor(z)
     par.r <- R[lower.tri(R)]
-    ccc <- matrix(par.r, n, m*(m-1)/2)
+    ccc <- matrix(par.r, n, m*(m-1)/2, byrow = TRUE)
     ID <- 1:m
     namesR <- numeric(0)
     for (i in 1:m) {          
@@ -360,10 +360,11 @@ mtvgarch <-  function (y, order.g = c(1, 1), order.h = c(1,1,0, 1,1,0), order.x 
       '
         Estimating Dynamic Conditional Correlations
       '
-      if (is.null(initial.values$par.dcc)) initial.values$par.dcc = c(0.05, 0.80)   
+      if (is.null(initial.values$par.dcc)) initial.values$par.dcc = c(0.05, 0.90)   
       ui.dcc <- rbind(diag(2), -c(1,1))
       ci.dcc <- c(5e-5, 5e-5, -1+5e-5)
-      fit.dcc <- constrOptim(theta = initial.values$par.dcc, f = dccObj, grad = NULL, ui = ui.dcc, ci = ci.dcc, z = z, sigma2 = sigma2, flag = 1)
+      fit.dcc <- constrOptim(theta = initial.values$par.dcc, f = dccObj, grad = NULL, 
+                             ui = ui.dcc, ci = ci.dcc, z = z, sigma2 = sigma2, flag = 1)
       if (fit.dcc$convergence != 0 && is.null(fit.dcc$message) == FALSE) warning(paste(fit.dcc$convergence))
       if (turbo == FALSE) {
         jac.dcc <- jacobian(func = dccObj, x = fit.dcc$par, z = z, sigma2 = sigma2, flag = 0)
@@ -391,9 +392,10 @@ mtvgarch <-  function (y, order.g = c(1, 1), order.h = c(1,1,0, 1,1,0), order.x 
       else xreg <- y2
     }
     else spillovers <- FALSE
+    xtv <- zoo(xtv, order.by = y.index)
     results <- list(Objs = Objs, sigma2 = sigma2, residuals = z, par.h = par.h, se.h = se.h, h = h, g = g, R = R,
                     order.g = order.g, order.h = order.h, order.x = order.x, xtv = xtv, xreg = xreg, spillovers = spillovers, 
-                    y = y, date = date(), turbo = turbo, trace = trace)
+                    y = y, y.index = y.index, date = date(), turbo = turbo, trace = trace)
     if (is.null(par.dcc)) results$ccc = ccc
     if (!is.null(par.dcc)) {
       results$dcc <- dcc

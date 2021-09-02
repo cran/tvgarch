@@ -2,7 +2,8 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL, xreg = NULL
                      initial.values = list(), opt = 2, turbo = FALSE, trace = FALSE)
 {
   n <- length(y)
-  if (order.g == 0) order.g <- NULL
+  y.index <- index(y)
+  if (!is.null(order.g) && order.g == 0) order.g <- NULL # if (order.g == 0) order.g <- NULL
   npar.h <- 1 + sum(order.h)
   if (!is.null(xreg)) {
     xreg <- as.matrix(xreg)
@@ -242,7 +243,7 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL, xreg = NULL
     par.hat.g <- c(par.hat0.g[1], iter.fit.g$par[1:s], par.hat0.g[-1], iter.fit.g$par[-(1:s)])
     if (turbo == TRUE) {
       vcov.g <- NULL
-      robse.par.g <- rep(NA, length(iter.fit.g$par))
+      robse.par.g <- rep(NA, length(par.hat.g))
     } 
     if (turbo == FALSE) {
       '
@@ -287,16 +288,18 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL, xreg = NULL
   estimates.h <- as.matrix(rbind(iter.fit.h$par, robse.par.h))
   rownames(estimates.h) <- c("Estimate:", "Std. Error:")
   colnames(estimates.h) <- names.h
-  logLik <- logLik.garchx(iter.fit.h)
+  # logLik <- logLik.garchx(iter.fit.h) 
   '
     TV-GJR-GARCH-X output:
   '
   if (!is.null(order.g)) {
     sigma2 <- h*g
+    logLik <- sum(dnorm(x = y, mean = 0, sd = sqrt(sigma2), log = TRUE))
     residuals <- y / sqrt(sigma2)
+    xtv <- zoo(xtv, order.by = y.index)
     results <- list(par.g = estimates.g[1,], se.g = estimates.g[2,], par.h = estimates.h[1,], se.h = estimates.h[2,], names.g = names.g, names.h = names.h, sigma2 = sigma2, 
                     residuals = residuals, h = h, g = g, logLik = logLik, vcov.g = vcov.g, vcov.h = vcov.h, message.g = iter.fit.g$message, message.h = iter.fit.h$message,
-                    order.g = order.g, order.h = order.h, xtv = xtv, xreg = xreg, opt = opt, y = y, date = date(), iter = iter, turbo = turbo)
+                    order.g = order.g, order.h = order.h, xtv = xtv, xreg = xreg, opt = opt, y = y, y.index = y.index, date = date(), iter = iter, turbo = turbo)
     class(results) <- "tvgarch"
   }
   if (is.null(order.g)){

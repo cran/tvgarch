@@ -12,7 +12,7 @@ tvgarchTest <- function (y, xtv = NULL, alpha = 0.05, trace = TRUE)
   if (is.null(xtv))  xtv <- matrix((1:n)/n, n, 1)
   if (trace == TRUE) {
     cat("\n")
-    cat("Test Results for GARCH(1,1) vs TV(1)-GARCH(1,1) \n\n")
+    cat("Test Results for GARCH(1,1) vs TV-GARCH(1,1) \n\n")
   }
   z <- as.numeric(y2/h-1)
   v <- cbind(1, y2, h)
@@ -96,7 +96,7 @@ tvgarchTest <- function (y, xtv = NULL, alpha = 0.05, trace = TRUE)
   rownames(matRob) = c("H0:B3=B2=B1=0", "H03:B3=0", "H02:B2=0|B3=0", "H01:B1=0|B3=B2=0")
   order.g <- as.matrix(NA)
   colnames(order.g) <- "Single"
-  rownames(order.g) <- "No. of locations"
+  rownames(order.g) <- paste("No. of locations (alpha = ",alpha,")", sep = "")
   if (pvalRob < alpha) {
     if (pvalRob2 < pvalRob1 && pvalRob2 < pvalRob3 && pvalRob2 < alpha) order.g[1,1] <- 2
     if (pvalRob1 < pvalRob3 && pvalRob1 < alpha) order.g[1,1] <- 1
@@ -104,7 +104,7 @@ tvgarchTest <- function (y, xtv = NULL, alpha = 0.05, trace = TRUE)
   }
   if (pvalRob >= alpha) {
     order.g[1,1] <- 0
-    warning("The long-term conditional variance is constant.")
+    warning("The unconditional variance is constant.")
   }
   if (trace ==TRUE) {
     cat("Non-Robust \n\n")
@@ -112,6 +112,7 @@ tvgarchTest <- function (y, xtv = NULL, alpha = 0.05, trace = TRUE)
     cat("\n")
     cat("Robust \n\n")
     print(matRob)
+    cat("\n")
   }
   return(order.g)  
 }

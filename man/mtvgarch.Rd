@@ -8,30 +8,30 @@ Equation by equation estimation of a multivariate multiplicative TV-GARCH-X mode
 }
 
 \usage{
-mtvgarch(y, order.g = c(1, 1), order.h = c(1,1,0, 1,1,0), order.x = NULL,
+mtvgarch(y, order.g = c(1, 1), order.h = NULL, order.x = NULL,
          initial.values = list(), xtv = NULL, xreg = NULL, opt = 2, dcc = FALSE, 
          turbo = TRUE, trace = FALSE)
 }
 
 \arguments{
-\item{y}{numeric matrix, time series or \code{\link{zoo}} object}
-\item{order.g}{integer matrix with each row indicating the number of locations in each transition function of the TV components}
-\item{order.h}{integer matrix with each row indicating the order.h for each series; the first column controls the GARCH order, the second the ARCH order and the third the asymmetry order of the GARCH-X components}
-\item{order.x}{\code{NULL} or binary matrix indicating which xreg variables should be included as covariates in the GARCH-X components. If provided and \code{xreg} is \code{NULL}, then the selected volatility spillovers are included as covariates.}
-\item{initial.values}{a list containing the initial parameter values passed on to the optimisation routines (\link{constrOptim} for the TV component and \link{nlminb} for the GARCH-X component). If list(), the default, then the values are chosen automatically. TV component: \code{intercept.g} - \code{NULL} or numeric vector, \code{size} - \code{NULL} or numeric matrix containing the size initial coefficients, \code{speed} - \code{NULL} or numeric matrix containing the speed initial coefficients, \code{location} - \code{NULL} or numeric matrix containing the location initial coefficients. GARCH-X component: \code{intercept.h} - numeric vector, \code{arch} - \code{NULL} or numeric matrix containing the ARCH initial coefficients, \code{garch} - \code{NULL} or numeric matrix containing the GARCH-type initial coefficients, \code{asym} - \code{NULL} or numeric matrix containing the asymmetry-type initial coefficients, and \code{par.xreg} - \code{NULL} or numeric matrix containing the X-type initial coefficients}
-\item{xtv}{\code{NULL} or numeric vector, time series or zoo object to include as the transition variable in the TV component. If \code{NULL}, calendar time, scaled between 0 and 1, is used as the transition variable}
-\item{xreg}{numeric vector, time series or zoo object to include as covariates in the GARCH-X component}
-\item{opt}{integer indicating whether the speed parameter in the TV component should be scaled. If 0, no scaling; if 1, speed/sd(xtv); if 2, exp(speed).}
-\item{dcc}{logical. If \code{TRUE}, dynamic conditional correlations are estimated. If \code{FALSE} (default), then the conditional correlations are constant.}
-\item{turbo}{logical. If \code{FALSE} (default), then the coefficient variance-covariance is computed during estimation, and the fitted values and residuals are attached to the returned object. If \code{TRUE}, then these operations are skipped, and hence estimation is faster. Note, however, that if turbo is set to \code{TRUE}, then the coefficient-covariance, fitted values and residuals can still be extracted subsequent to estimation with vcov.mtvgarch, fitted.mtvgarch and residuals.mtvgarch, respectively}
-\item{trace}{logical. If \code{TRUE} all output is printed}
+\item{y}{numeric \code{matrix}, time series or \code{\link{zoo}} object.}
+\item{order.g}{\code{integer} \code{matrix} with each row indicating the number of locations in each transition function of the TV components.}
+\item{order.h}{\code{integer} \code{matrix} with each row indicating the order.h for each series; the first column controls the GARCH order, the second the ARCH order and the third the asymmetry order of the GARCH-X components. If \code{NULL}, the default, all series are assumed to follow a GARCH(1,1,0).}
+\item{order.x}{\code{NULL} or binary \code{matrix} indicating which xreg variables should be included as covariates in the GARCH-X components. If provided and \code{xreg} is \code{NULL}, then the selected volatility spillovers are included as covariates.}
+\item{initial.values}{a list containing the initial parameter values passed on to the optimisation routines (\link{constrOptim} for the TV component and \link{nlminb} for the GARCH-X component). If list(), the default, then the values are chosen automatically. TV component: \code{intercept.g} - \code{NULL} or numeric vector, \code{size} - \code{NULL} or numeric matrix containing the size initial coefficients, \code{speed} - \code{NULL} or numeric \code{matrix} containing the speed initial coefficients, \code{location} - \code{NULL} or numeric \code{matrix} containing the location initial coefficients. GARCH-X component: \code{intercept.h} - numeric \code{vector}, \code{arch} - \code{NULL} or numeric \code{matrix} containing the ARCH initial coefficients, \code{garch} - \code{NULL} or numeric \code{matrix} containing the GARCH-type initial coefficients, \code{asym} - \code{NULL} or numeric \code{matrix} containing the asymmetry-type initial coefficients, and \code{par.xreg} - \code{NULL} or numeric \code{matrix} containing the X-type initial coefficients.}
+\item{xtv}{\code{NULL} or numeric \code{vector}, time series or zoo object to include as the transition variable in the TV component. If \code{NULL}, calendar time, scaled between 0 and 1, is used as the transition variable.}
+\item{xreg}{numeric \code{vector}, time series or zoo object to include as covariates in the GARCH-X component.}
+\item{opt}{\code{integer} indicating whether the speed parameter in the TV component should be scaled. If 0, no scaling; if 1, speed/sd(xtv); if 2, exp(speed).}
+\item{dcc}{\code{logical}. If \code{TRUE}, dynamic conditional correlations are estimated. If \code{FALSE} (default), then the conditional correlations are constant.}
+\item{turbo}{\code{logical}. If \code{FALSE} (default), then the coefficient variance-covariance is computed during estimation, and the fitted values and residuals are attached to the returned object. If \code{TRUE}, then these operations are skipped, and hence estimation is faster. Note, however, that if turbo is set to \code{TRUE}, then the coefficient-covariance, fitted values and residuals can still be extracted subsequent to estimation with vcov.mtvgarch, fitted.mtvgarch and residuals.mtvgarch, respectively.}
+\item{trace}{\code{logical}. If \code{TRUE} all output is printed.}
 }
 
-\value{A list of class 'mtvgarch'}
+\value{A list of class 'mtvgarch'.}
 
 \references{
-Cristina Amado and Timo Ter\"{a}svirta (2013) Modelling volatility by variance decomposition, Journal of Econometrics 175, 142-153. 
-Christian Francq and Jean-Michel Zako\"{i}an (2016) Estimating multivariate volatility models equation by equation, J. R. Stat. Soc. Ser. B Stat. Methodol 78, 613-635.
+Cristina Amado and Timo Ter{\"a}svirta (2013) Modelling volatility by variance decomposition, Journal of Econometrics 175, 142-153. 
+Christian Francq and Jean-Michel Zako{\"i}an (2016) Estimating multivariate volatility models equation by equation, J. R. Stat. Soc. Ser. B Stat. Methodol 78, 613-635.
 Robert F. Engle (2002) Dynamic conditional correlation: A simple class of multivariate generalized autoregressive conditional heteroskedasticity models, Journal of Business and Economic Statistics 20, 339-350.
 }
 
@@ -48,9 +48,9 @@ Robert F. Engle (2002) Dynamic conditional correlation: A simple class of multiv
 set.seed(123)
 
 ## Simulate from a bivariate CCC-TV(1)-GARCH(1,1) model (default):
-mySim <- mtvgarchSim(n = 1500)
+mySim <- mtvgarchSim(n = 1000)
 
-## Estimate a CCC-TV(1)-GARCH(1,1) model:
+## Estimate a CCC-TV(1)-GARCH(1,1) model (default):
 myEst <- mtvgarch(y = mySim)
 
 ## Print estimation results:

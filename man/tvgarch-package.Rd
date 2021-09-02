@@ -12,8 +12,8 @@ Simulation, estimation and inference for univariate and multivariate TV(s)-GARCH
   \tabular{ll}{
   Package: \tab tvgarch\cr
   Type: \tab Package\cr
-  Version: \tab 2.0\cr
-  Date: \tab 2021-04-15\cr
+  Version: \tab 2.1\cr
+  Date: \tab 2021-09-01 \cr
   License: \tab GPL>=2\cr
   }
 }
@@ -34,7 +34,7 @@ set.seed(123)
 ## Simulate from a TV(1)-GARCH(1,1) model (default):
 ySim <- tvgarchSim(n = 1500)
 
-## Estimate a TV(1)-GARCH(1,1) model:
+## Estimate a TV(1)-GARCH(1,1) model (default):
 yEst <- tvgarch(y = ySim)
 yEst
 }

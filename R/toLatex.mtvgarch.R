@@ -17,27 +17,34 @@ toLatex.mtvgarch <- function (object, digits = 4, ...)
       coefs.h <- as.numeric(coef.garchx(object = object.i))
       object.i$order.h <- object.i$order
     }
-    if(object.i$order.h[1] != 0 && is.null(object.i$order.g)) names.h <- c("", paste("y^{2}_{",paste(i, sep = ""),",t-",paste(seq(1:object.i$order.h[2]), sep = ""),"}", sep = ""))
-    if(object.i$order.h[1] != 0 && !is.null(object.i$order.g)) names.h <- c("", paste("\\dfrac{y^{2}_{",paste(i, sep = ""),",t-",paste(seq(1:object.i$order.h[2]), sep = ""),"}}{g_{", paste(i, sep = ""),",t-", paste(seq(1:object.i$order.h[2]), sep = ""),"}}", sep = ""))
-    if(object.i$order.h[1] != 0 && !is.null(object.i$order.g)) names.h <- c(names.h, paste("\\widehat{h}_{",paste(i, sep = ""),",t-",paste(seq(1:object.i$order.h[1]), sep = ""),"}", sep = "")) 
-    if(object.i$order.h[1] != 0 && is.null(object.i$order.g)) names.h <- c(names.h, paste("\\widehat{\\sigma}^2_{",paste(i, sep = ""),",t-",paste(seq(1:object.i$order.h[1]), sep = ""),"}", sep = "")) 
-    if(object.i$order.h[3] != 0) names.h <- c(names.h, paste("y^{2}_{",paste(i, sep = ""),",t-",paste(seq(1:object.i$order.h[3]), sep = ""),"}\\text{I}(y_",paste(i, sep = "")," < 0)", sep = "")) 
-    if(!is.null(object$xreg) && object$spillovers == FALSE) names.h <- c(names.h, paste("x_{",paste(1:ncol(object$xreg),sep = ""),",t}", sep = ""))
+    if(object.i$order.h[1] != 0 && is.null(object.i$order.g)) names.h <- c("", paste("y^{2}_{",paste(i, sep = ""),",t-",
+      paste(seq(1:object.i$order.h[2]), sep = ""),"}", sep = ""))
+    if(object.i$order.h[1] != 0 && !is.null(object.i$order.g)) names.h <- c("", paste("\\dfrac{y^{2}_{",paste(i, sep = ""),",t-",
+      paste(seq(1:object.i$order.h[2]), sep = ""),"}}{\\widehat{g}_{",paste(i, sep = ""),",t-", 
+      paste(seq(1:object.i$order.h[2]), sep = ""),"}}", sep = ""))
+    if(object.i$order.h[1] != 0 && !is.null(object.i$order.g)) names.h <- c(names.h, paste("\\widehat{h}_{",
+      paste(i, sep = ""),",t-",paste(seq(1:object.i$order.h[1]), sep = ""),"}", sep = "")) 
+    if(object.i$order.h[1] != 0 && is.null(object.i$order.g)) names.h <- c(names.h, paste("\\widehat{\\sigma}^2_{",
+      paste(i, sep = ""),",t-",paste(seq(1:object.i$order.h[1]), sep = ""),"}", sep = "")) 
+    if(object.i$order.h[3] != 0) names.h <- c(names.h, paste("\\dfrac{y^{2}_{",paste(i, sep = ""),",t-",
+      paste(seq(1:object.i$order.h[3]), sep = ""),"}}{\\widehat{g}_{",paste(i, sep = ""),",t-", 
+      paste(seq(1:object.i$order.h[3]), sep = ""),"}}\\text{I}(",paste("y_{",paste(i, sep = ""),",t-",
+                                                                       paste(seq(1:object.i$order.h[3]), sep = ""),"}", sep = "")," < 0)", sep = "")) 
+    if(!is.null(object$xreg) && object$spillovers == FALSE) names.h <- c(names.h, paste("x_{",paste(1:ncol(object$xreg),sep = ""),"t}", sep = ""))
     if(!is.null(object$xreg) && object$spillovers == TRUE){
       for(x in which(object$order.x[i,]==1)){
         if(object$order.g[x,1] == 0) names.h <- c(names.h, paste("y^{2}_{",paste(x,sep = ""),",t-1}", sep = ""))
-        if(object$order.g[x,1] == 1) names.h <- c(names.h, paste("\\dfrac{y^{2}_{",paste(x, sep = ""),",t-1}}{g_{",paste(x, sep = ""),",t-1}}", sep = ""))
+        if(object$order.g[x,1] == 1) names.h <- c(names.h, paste("\\dfrac{y^{2}_{",paste(x, sep = ""),",t-1}}{\\widehat{g}_{",paste(x, sep = ""),",t-1}}", sep = ""))
       }
     }  
     coefsNames.h <- names.h
     coefs.h <- as.numeric(coefs.h)
     if(object.i$turbo == TRUE) {
       if (is.null(object.i$order.g) || object.i$order.g[1] == 0) object.i$se.h <- sqrt(diag(vcov.tvgarch(object = object.i)))
-      if (!is.null(object.i$order.g) && object.i$order.g[1] == 1) {
+      if (!is.null(object.i$order.g) || object.i$order.g[1] != 0) {
         object.i$se.h <- sqrt(diag(vcov.tvgarch(object = object.i, spec = "garch")))
         object.i$se.g <- sqrt(diag(vcov.tvgarch(object = object.i, spec = "tv")))
         s <- length(object.i$order.g)
-        object.i$se.g <- c(NA, object.i$se.g[1:s], rep(NA,s), object.i$se.g[-(1:s)])
       }
     }
     stderrs <- as.numeric(object.i$se.h)
@@ -49,16 +56,16 @@ toLatex.mtvgarch <- function (object, digits = 4, ...)
     }
     txtAddEq1 <- " \\\\[1mm]"
     txtAddEq2 <- " \\nonumber \\\\[1mm]"
-    if (is.null(object$order.g) || object$order.g[i,1] == 0) eqtxt.h <- paste0("  \\sigma^2_{",paste(i,sep = ""),",t} &=& ", eqtxt.h, "", txtAddEq2, " \n")
-    if (!is.null(object$order.g) && object$order.g[i,1] != 0) {
-      eqtxt.h <- paste0("  \\widehat{h}_{",paste(i,sep = ""),",t} &=& ", eqtxt.h, "", txtAddEq2, " \n")
+    if (is.null(object$order.g) || object$order.g[i,1] == 0) eqtxt.h <- paste0("  \\sigma^2_{",paste(i,sep = ""),"t} &=& ", eqtxt.h, "", txtAddEq2, " \n")
+    if (!is.null(object$order.g) || object$order.g[i,1] != 0) {
+      eqtxt.h <- paste0("  \\widehat{h}_{",paste(i,sep = ""),"t} &=& ", eqtxt.h, "", txtAddEq2, " \n")
       if(!is.null(object.i$order.g)){
         s <- length(object.i$order.g)
         coefs.g <- object.i$par.g[1:(s+1)]
         coefs.tv <- object.i$par.g[-(1:(s+1))]
         coefsNames.g <- ""
         for(j in 1:s){
-          coefsNames.g <- c(coefsNames.g, paste("\\widehat{G}_{",paste(i, sep = ""),paste(j, sep = ""),",t}", sep = ""))
+          coefsNames.g <- c(coefsNames.g, paste("\\widehat{G}_{",paste(i, sep = ""),paste(j, sep = ""),"}", sep = ""))
         }
         coefs.g <- as.numeric(coefs.g)
         stderrs.g <- as.numeric(object.i$se.g[1:(s+1)])
@@ -66,18 +73,19 @@ toLatex.mtvgarch <- function (object, digits = 4, ...)
         eqtxt.g <- NULL
         for (j in 1:length(coefs.g)){
           ifpluss <- ifelse(j == 1, "", " + ")
-          eqtxt.g <- paste(eqtxt.g, ifelse(coefs.g[j] < 0, " - ",ifpluss))
-          if(j==1) eqtxt.g <- paste(eqtxt.g, "\\underset{(-)}{", format(round(abs(coefs.g[j]), digits = digits), nsmall = digits),"}", sep = "")
-          if(j>1){
+          eqtxt.g <- paste(eqtxt.g, ifelse(coefs.g[j] < 0, " - ", ifpluss))
+          if (j == 1) eqtxt.g <- paste(eqtxt.g, "\\underset{(-)}{", format(round(abs(coefs.g[j]), digits = digits), nsmall = digits),"}", sep = "")
+          if (j > 1) {
             eqtxt.g <- paste(eqtxt.g, "\\underset{(", format(round(stderrs.g[j], digits = digits), nsmall = digits),")}{", format(round(abs(coefs.g[j]), 
-                       digits = digits), nsmall = digits),"}","\\widehat{G}_{", paste(j-1, sep = ""),"t}(",
+                       digits = digits), nsmall = digits),"}","\\widehat{G}_{", paste(j-1, sep = ""),"}(",
                        "\\underset{(-)}{", format(round(abs(coefs.tv[j-1]), digits = digits), nsmall = digits),"};", sep = "")
-            for(k in 1:object$order.g[j-1]){
+            for(k in 1:object.i$order.g[j-1]){
               eqtxt.g <- paste(eqtxt.g, "\\underset{(", format(round(stderrs.tv[s+k], digits = digits), nsmall = digits),")}{", 
-                         format(round(abs(coefs.tv[s+k]), digits = digits), nsmall = digits),"}", sep = "")
-              if(k<object$order.g[j-1]) eqtxt.g <- paste(eqtxt.g,",", sep = "")
+                         format(round(abs(coefs.tv[s+k]), digits = digits), nsmall = digits), "}", sep = "")
+              if(k < object.i$order.g[j-1]) eqtxt.g <- paste(eqtxt.g, ",", sep = "")
             }
-            eqtxt.g <- paste(eqtxt.g,")", sep = "")
+            if (colnames(object.i$xtv) == "time") eqtxt.g <- paste(eqtxt.g, "; t/n)", sep = "")
+            else eqtxt.g <- paste(eqtxt.g, "; s_{t})", sep = "")
           }
         }
         txtAddEq <- " \\\\[1mm]"

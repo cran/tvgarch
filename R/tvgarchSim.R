@@ -1,7 +1,7 @@
 tvgarchSim <- function(n, order.g = 1, order.h = c(1,1,0),
-                       intercept.g = 1.2, size = 0.8, speed = 2, location = 0.5, xtv = NULL, 
+                       intercept.g = 1.2, size = 5, speed = 25, location = 0.5, xtv = NULL, 
                        intercept.h = 0.2, arch = 0.1, garch = 0.8, asym = NULL, xreg = NULL,
-                       opt = 2, verbose = FALSE, innovations = NULL)
+                       opt = 0, verbose = FALSE, innovations = NULL)
 {
   m <- 1
   names.ID <- "y"

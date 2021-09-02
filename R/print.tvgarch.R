@@ -8,7 +8,14 @@ print.tvgarch <- function (x, ...)
     cat("\n")
     cat("Date:", x$date, "\n")
     model <- NULL
-    model <- paste(model, "TV(", length(x$order.g), ")-", sep = "") 
+    if (length(x$order.g) == 1) model <- paste(model, "TV(", x$order.g, ")-", sep = "") 
+    else {
+      for (i in 1:length(x$order.g)){
+        if (i == 1) model <- paste(model, "TV(", x$order.g[i], sep = "") 
+        else if (i == length(x$order.g)) model <- paste(model, ",", x$order.g[i], ")-", sep = "") 
+        else model <- paste(model, ",", x$order.g[i], sep = "")
+      }
+    }
     if (x$order.h[3] != 0) model <- paste(model, "GJR(", x$order.h[3], ")-", sep = "") 
     if (x$order.h[1] != 0) model <- paste(model, "G", sep = "") 
     model <- paste(model, "ARCH(", sep = "") 
