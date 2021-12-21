@@ -1,7 +1,8 @@
-tvgarchSim <- function(n, order.g = 1, order.h = c(1,1,0),
-                       intercept.g = 1.2, size = 5, speed = 25, location = 0.5, xtv = NULL, 
-                       intercept.h = 0.2, arch = 0.1, garch = 0.8, asym = NULL, xreg = NULL,
-                       opt = 0, verbose = FALSE, innovations = NULL)
+tvgarchSim <- function(n, order.g = 1, order.h = c(1,1,0), intercept.g = 1.2, 
+                       size = 5, speed = 25, location = 0.5, xtv = NULL, 
+                       intercept.h = 0.2, arch = 0.1, garch = 0.8, asym = NULL, 
+                       xreg = NULL, opt = 0, as.zoo = TRUE, verbose = FALSE, 
+                       innovations = NULL)
 {
   m <- 1
   names.ID <- "y"
@@ -32,7 +33,8 @@ tvgarchSim <- function(n, order.g = 1, order.h = c(1,1,0),
   '
     Constructing the h component
   '
-  hSim <- garchxSim(n = n, intercept = intercept.h, arch = arch, garch = garch, asym = asym, xreg = xreg, innovations = innovations, as.zoo = FALSE, verbose = TRUE)
+  hSim <- garchxSim(n = n, intercept = intercept.h, arch = arch, garch = garch, asym = asym, xreg = xreg, 
+                    innovations = innovations, as.zoo = FALSE, verbose = TRUE)
   h <- as.matrix(hSim[,"sigma2"])
   colnames(h) <- "h"
   innovations <- as.matrix(hSim[,"innovations"])
@@ -40,15 +42,21 @@ tvgarchSim <- function(n, order.g = 1, order.h = c(1,1,0),
   '
     Output
   '
-  sigma2 <- h * g
+  sigma2 <- h*g
   colnames(sigma2) <- "sigma2"
-  y <- sqrt(sigma2) * innovations
+  y <- sqrt(sigma2)*innovations
   colnames(y) <- names.ID
   Ineg <- as.matrix(as.numeric(innovations < 0))
   colnames(Ineg) <- "Ineg"
   if (verbose == TRUE) {
-    results <- cbind(y, sigma2, g, h, innovations, Ineg)
-    return(results)
+    result <- cbind(y, sigma2, g, h, innovations, Ineg)
   }
-  if(verbose == FALSE) return(zoo(y))
+  if(verbose == FALSE){
+    result <- y
+  }
+  result <- as.matrix(result)
+  if (as.zoo == TRUE) {
+    result <- as.zoo(result)
+  }
+  return(result)
 }

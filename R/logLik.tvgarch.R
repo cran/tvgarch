@@ -1,10 +1,8 @@
-logLik.tvgarch <- function(object, ...)
+logLik.tvgarch <- function (object, ...)
 {
-  if (!is.null(object$order.g)) {
-    result <- sum(dnorm(x = object$y, mean = 0, sd = sqrt(object$h*object$g), log = TRUE))
+    result <- object$logLik
+    class(result) <- "logLik"
     attr(result, "df") <- length(coef.tvgarch(object = object))
-    attr(result, "nobs") <- nobs.tvgarch(object = object)
+    attr(result, "nobs") <- length(object$sigma2)
     return(result)
-  }
-  if (is.null(object$order.g)) return(logLik.garchx(object = object))
 }

@@ -1,6 +1,6 @@
-toLatex.tvgarch <- function(object, digits = 4, ...)
+toLatex.tvgarch <- function (object, digits = 4, ...)
 {
-  if (!is.null(object$order.g)) {
+  if (!is.null(object$order.g) && object$order.g[1] != 0) {
     if (object$turbo == TRUE) {
       object$se.g <- sqrt(diag(vcov.tvgarch(object = object, spec = "tv")))
       object$se.h <- sqrt(diag(vcov.tvgarch(object = object, spec = "garch")))
@@ -58,13 +58,48 @@ toLatex.tvgarch <- function(object, digits = 4, ...)
     goftxt <- NULL
     goftxt <- "&"
     iT <- length(object$sigma2)
-    goftxt <- paste(goftxt, " \\text{Log-likelihood: }", format(round(as.numeric(object$logLik), digits = digits), nsmall = digits), "\\qquad T = ", iT, 
+    goftxt <- paste(goftxt, " \\text{Log-likelihood: }", 
+                    format(round(as.numeric(object$logLik), digits = digits), 
+                           nsmall = digits), "\\qquad T = ", iT, 
                     " \n", sep = "")
+    cat("%%the model was estimated:", object$date, "\n")
     cat("\\begin{align*}\n")
     cat(eqtxt.h)
     cat(eqtxt.g)
     cat(goftxt)
     cat("\\end{align*}\n")
   }
-  if (is.null(object$order.g)) toLatex.garchx(object = object, digits = digits)
+  if (is.null(object$order.g) || object$order.g[1] == 0) {
+    coefs <- coef.tvgarch(object = object)
+    coefsNames <- names(coefs)
+    coefsNames[1] <- ""
+    coefs <- as.numeric(coefs)
+    if (object$turbo == TRUE) {
+      object$se.h <- sqrt(diag(vcov.tvgarch(object = object)))
+    }
+    stderrs <- as.numeric(object$se.h)
+    eqtxt <- NULL
+    for (i in 1:length(coefs)) {
+      ifpluss <- ifelse(i == 1, "", " + ")
+      eqtxt <- paste(eqtxt, ifelse(coefs[i] < 0, " - ", ifpluss), 
+                     "\\underset{(", format(round(stderrs[i], digits = digits), 
+                                            nsmall = digits), ")}{", 
+                     format(round(abs(coefs[i]), digits = digits), 
+                            nsmall = digits), "}", coefsNames[i], sep = "")
+    }
+    txtAddEq <- " \\\\[1mm]"
+    eqtxt <- paste0("  \\widehat{\\sigma}_t^2 &=& ", eqtxt, "", txtAddEq, " \n")
+    goftxt <- NULL
+    goftxt <- "   &&"
+    iT <- nobs.tvgarch(object = object)
+    goftxt <- paste(goftxt, " \\text{Log-likelihood: }", 
+                    format(round(as.numeric(logLik.tvgarch(object = object)),
+                                 digits = digits), nsmall = digits), 
+                    "\\qquad T = ", iT, " \\nonumber \n", sep = "")
+    cat("%%note: the 'eqnarray' environment requires the 'amsmath' package\n")
+    cat("%%the model was estimated:", object$date, "\n")
+    cat("\\begin{eqnarray}\n")
+    cat(eqtxt)
+    cat(goftxt)
+    cat("\\end{eqnarray}\n")  }
 }

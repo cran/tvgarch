@@ -1,23 +1,32 @@
-quantile.mtvgarch <- function (x, probs = 0.025, names = TRUE, type = 7, as.zoo = TRUE, ...)
+quantile.mtvgarch <- function (x, probs = 0.025, type = 7, as.zoo = TRUE, 
+                               ...)
 {
-  results <- list()
-  m <- ncol(object$y)
-  nobs <- nrow(object$y)
-  npar <- 0
-  for(i in 1:m){
-    if (!is.null(object$order.g) && object$order.g[i,1] != 0) results[[colnames(object$y)[i]]] <- quantile.tvgarch(x = object$Objs[[paste("obj", i, sep = "")]], probs = probs, names = names, type = type, as.zoo = as.zoo)
-    if (is.null(object$order.g[i,1]) || object$order.g[i,1] == 0){ 
-      object$Objs[[paste("obj", i, sep = "")]]$maxpqrpluss1 <- 1
-      results[[colnames(object$y)[i]]] <- quantile.garchx(x = object$Objs[[paste("obj", i, sep = "")]], probs = probs, names = names, type = type, as.zoo = as.zoo)
-    }
+  m <- ncol(x$y)
+  n <- nrow(x$y)
+  ncol.i <- 0
+  iCols <- length(probs)
+  if (iCols == 1) {
+    results <- matrix(NA, n, m)
   }
-  if (NCOL(results[[1]]) == 1) {
-    results2 <- matrix(NA, nobs, m)
-    for(i in 1:m){
-      results2[,i] <- results[[i]]
+  if (iCols > 1) {
+    results <- matrix(NA, n, m*iCols)
+    colnames(results) <- paste("q", 1:ncol(results), sep = "_")
+  }  
+  for(i in 1:m){
+    result.i <- quantile.tvgarch(x = x$Objs[[paste("obj", i, sep = "")]], 
+                                 probs = probs, names = TRUE, type = type, 
+                                 as.zoo = as.zoo)
+    name <- x$names.y[i]
+    results[,(ncol.i+1):(ncol.i+iCols)] <- result.i
+    if (iCols > 1) {
+      colnames(results)[(ncol.i+1):(ncol.i+iCols)] <-  
+        paste(colnames(result.i), name, sep = "_")
     }
-    results <- as.matrix(results2)
-    colnames(results) <- colnames(object$y)
+    if (i != m) ncol.i <- ncol.i + iCols
+  }
+  if (iCols == 1) {
+    colnames(results) <- paste(paste(probs*100, "%", sep = ""), 
+                               x$names.y, sep = "_")
   }
   return(results)
 }

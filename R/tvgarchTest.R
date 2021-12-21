@@ -1,18 +1,21 @@
-tvgarchTest <- function (y, xtv = NULL, alpha = 0.05, trace = TRUE)
+tvgarchTest <- function (y, xtv = NULL, alpha = 0.05)
 {
   y <- as.matrix(y)
-  garch11Est <- garchx(y = y, order = c(1, 1))
-  if (trace == TRUE) print.garchx(garch11Est)
-  theta_hat <- coef.garchx(garch11Est)
-  h <- as.matrix(fitted.garchx(garch11Est))
-  y <- y[-1]
+  garch11Est <- tvgarch(y = y, order.g = NULL)
+  theta_hat <- coef.tvgarch(garch11Est)
+  h <- as.matrix(fitted.tvgarch(garch11Est))
   n <- length(y)
   y2 <- y^2
-  if (!is.null(xtv)) xtv <- matrix(xtv[-1], n, 1)
-  if (is.null(xtv))  xtv <- matrix((1:n)/n, n, 1)
-  if (trace == TRUE) {
-    cat("\n")
-    cat("Test Results for GARCH(1,1) vs TV-GARCH(1,1) \n\n")
+  if (!is.null(xtv)) {
+    if (length(xtv) != n) {
+      stop("Length of xtv unequal to the number of observations.")
+    }
+    xtv <- matrix(xtv, n, 1)
+    if (is.null(colnames(xtv))) colnames(xtv) <- "xtv"
+  }
+  if (is.null(xtv))  {
+    xtv <- matrix((1:n)/n, n, 1)
+    colnames(xtv) <- "time"
   }
   z <- as.numeric(y2/h-1)
   v <- cbind(1, y2, h)
@@ -56,9 +59,11 @@ tvgarchTest <- function (y, xtv = NULL, alpha = 0.05, trace = TRUE)
   LMB1 <- n * (RSS0 - RSS11) / RSS0
   dfB1 <- 1
   pvalB1 <- pchisq(LMB1, dfB1, lower.tail = FALSE)
-  mat = round(rbind(c(LM3,pval3), c(LMB3,pvalB3), c(LMB2,pvalB2), c(LMB1,pvalB1)), 4)
+  mat = round(rbind(c(LM3,pval3), c(LMB3,pvalB3), c(LMB2,pvalB2), 
+                    c(LMB1,pvalB1)), 4)
   colnames(mat) = c("NonRobTR2", "p-value")
-  rownames(mat) = c("H0:B3=B2=B1=0", "H03:B3=0", "H02:B2=0|B3=0", "H01:B1=0|B3=B2=0")
+  rownames(mat) = c("H0:B3=B2=B1=0", "H03:B3=0", "H02:B2=0|B3=0", 
+                    "H01:B1=0|B3=B2=0")
   ' 
     Robust LM Test
   '
@@ -91,14 +96,18 @@ tvgarchTest <- function (y, xtv = NULL, alpha = 0.05, trace = TRUE)
   RSS1Rob <- sum(lm(one ~ ResRob1 -1)$residuals^2)
   LMRob1 <- n - RSS1Rob
   pvalRob1 <- pchisq(LMRob1, dfB1, lower.tail = FALSE)
-  matRob = round(rbind(c(LMRob,pvalRob), c(LMRob3,pvalRob3), c(LMRob2,pvalRob2), c(LMRob1,pvalRob1)),4)
+  matRob = round(rbind(c(LMRob,pvalRob), c(LMRob3,pvalRob3), c(LMRob2,pvalRob2), 
+                       c(LMRob1,pvalRob1)),4)
   colnames(matRob) = c("RobTR2", "p-value")
-  rownames(matRob) = c("H0:B3=B2=B1=0", "H03:B3=0", "H02:B2=0|B3=0", "H01:B1=0|B3=B2=0")
+  rownames(matRob) = c("H0:B3=B2=B1=0", "H03:B3=0", "H02:B2=0|B3=0", 
+                       "H01:B1=0|B3=B2=0")
   order.g <- as.matrix(NA)
   colnames(order.g) <- "Single"
-  rownames(order.g) <- paste("No. of locations (alpha = ",alpha,")", sep = "")
+  rownames(order.g) <- paste("No. of locations (alpha = ", alpha, ")", sep = "")
   if (pvalRob < alpha) {
-    if (pvalRob2 < pvalRob1 && pvalRob2 < pvalRob3 && pvalRob2 < alpha) order.g[1,1] <- 2
+    if (pvalRob2 < pvalRob1 && pvalRob2 < pvalRob3 && pvalRob2 < alpha) {
+      order.g[1,1] <- 2
+    }
     if (pvalRob1 < pvalRob3 && pvalRob1 < alpha) order.g[1,1] <- 1
     if (pvalRob3 < pvalRob1 && pvalRob3 < alpha) order.g[1,1] <- 3
   }
@@ -106,13 +115,8 @@ tvgarchTest <- function (y, xtv = NULL, alpha = 0.05, trace = TRUE)
     order.g[1,1] <- 0
     warning("The unconditional variance is constant.")
   }
-  if (trace ==TRUE) {
-    cat("Non-Robust \n\n")
-    print(mat)
-    cat("\n")
-    cat("Robust \n\n")
-    print(matRob)
-    cat("\n")
-  }
-  return(order.g)  
+  results <- list(mat = mat, matRob = matRob, xtv = xtv, order.g = order.g,
+                  garch11 = garch11Est, date = date())
+  class(results) <- "tvgarchTest"
+  return(results)
 }

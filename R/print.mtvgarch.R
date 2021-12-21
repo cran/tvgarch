@@ -7,11 +7,7 @@ print.mtvgarch <- function (x, ...)
   for (i in 1:ncol(x$y)) {
     cat("\n")
     cat("*** Equation ", i, " (",colnames(x$y)[i], ") ***\n", sep = "")
-    if (!is.null(x$order.g) && x$order.g[i,1] != 0) print.tvgarch(x = x$Objs[[paste("obj", i, sep = "")]])
-    if (is.null(x$order.g[i,1]) || x$order.g[i,1] == 0) { 
-      x$Objs[[paste("obj", i, sep = "")]]$maxpqr <- 0
-      print.garchx(x = x$Objs[[paste("obj", i, sep = "")]])
-    }
+    print.tvgarch(x = x$Objs[[paste("obj", i, sep = "")]])
   }
   cat("\n")
   cat("***************************** \n")
@@ -27,7 +23,8 @@ print.mtvgarch <- function (x, ...)
     sigma2 <- x$sigma2
     lndetR <- log(det(x$R))
     invR <- solve(x$R)
-    lf <- -0.5*nobs*m*log(2*pi) - 0.5*sum(log(sigma2)) - 0.5*nobs*lndetR - 0.5*sum((z %*% invR)*z)
+    lf <- -0.5*nobs*m*log(2*pi) - 0.5*sum(log(sigma2)) - 0.5*nobs*lndetR - 
+      0.5*sum((z %*% invR)*z)
     print(round(x$R, digits = 4))
     cat(" \n")
     loglik <- as.matrix(lf)
@@ -47,7 +44,9 @@ print.mtvgarch <- function (x, ...)
     cat("Coefficients \n")
     cat(" \n")
     if (x$turbo == TRUE) {
-      x$se.dcc <- matrix(sqrt(diag(vcov.mtvgarch(x)$dcc)), 1, 2)
+      x$se.dcc <- 
+        matrix(sqrt(diag(vcov.mtvgarch(object = x, 
+                                       spec = "cc"))), 1, 2)
     }
     estimates.dcc <- as.matrix(rbind(x$par.dcc, x$se.dcc))
     rownames(estimates.dcc) <- c("Estimate:", "Std. Error:")

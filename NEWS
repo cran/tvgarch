@@ -1,3 +1,17 @@
+Version 2.2 (11 December 2021):
+============================
+
+1. mtvgarchSim() has a different specification for the volatility spillovers, i.e.,  when 'order.x' is not NULL, but 'xreg' is. Only up to order.h = (1,1,1) is allowed with volatility spillovers.
+2. Argument 'as.zoo' (= TRUE by default) added to tvgarchSim(), predict.tvgarch(), mtvgarchSim() and predict.mtvgarch().
+3. Extraction functions plot() and summary() added to objects of class 'tvgarch' and 'mtvgarch'.
+4. Argument 'spec' in the extraction functions should be one of “sigma2”, “tv” or “garch” for objects of class 'tvgarch' and one of “sigma2”, “tv”, “garch” or “cc” for objects of class 'mtvgarch'. “sigma2”, “tv” or “garch” is only relevant for TV-GARCH-X models (irrelevant for GARCH-X models).
+5. Argument 'names' in the extraction function quantile.mtvgarch() removed. 
+6. Names of columns in extraction functions for objects of class 'mtvgarch' have changed.
+7. Objects of class 'tvgarchTest' are now possible to obtain when testing for a TV-GARCH(1,1) model as well as results from the estimation of the model under the null hypothesis, i.e., a GARCH(1,1) model. 
+8. Argument 'trace' has been eliminated from function tvgarchTest().
+9. Bugs have been fixed.
+
+
 Version 2.1 (01 September 2021):
 ============================
 

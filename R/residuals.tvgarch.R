@@ -1,8 +1,7 @@
-residuals.tvgarch <- function(object, as.zoo = TRUE, ...)
+residuals.tvgarch <- function (object, as.zoo = TRUE, ...)
 {
-  if (!is.null(object$order.g)) {
-    if (as.zoo == TRUE) object$residuals <- zoo(object$residuals, order.by = index(object$y))
-    return(object$residuals)
+  if (as.zoo == TRUE) {
+    object$residuals <- zoo(object$residuals, order.by = index(object$y))
   }
-  if (is.null(object$order.g)) return(residuals.garchx(object = object, as.zoo = as.zoo))
+  return(object$residuals)
 }

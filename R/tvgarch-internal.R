@@ -1,12 +1,12 @@
 .onAttach <- function(libname, pkgname)
 {
 txt <- c("\n",
-  paste(sQuote("tvgarch"), "version 2.1\n"),
+  paste(sQuote("tvgarch"), "version 2.2 \n"),
   "\n",
   paste0("Time Varying GARCH Modelling"),
   "\n",
   paste("CRAN website: https://CRAN.R-project.org/package=tvgarch"),
-  paste("Personal webpage: https://sites.google.com/site/susanacamposmartins/home"),
+  paste("Personal webpage: https://sites.google.com/site/susanacamposmartins"),
   "\n")
   
   ##print message:

@@ -11,7 +11,7 @@ Simulate from a univariate multiplicative TV(s)-GARCH(p,q,r)-X model.
 tvgarchSim(n, order.g = 1, order.h = c(1,1,0),
            intercept.g = 1.2, size = 5, speed = 25, location = 0.5, xtv = NULL, 
            intercept.h = 0.2, arch = 0.1, garch = 0.8, asym = NULL, xreg = NULL,
-           opt = 0, verbose = FALSE, innovations = NULL)
+           opt = 0, as.zoo = TRUE, verbose = FALSE, innovations = NULL)
 }
 
 \arguments{
@@ -29,11 +29,13 @@ tvgarchSim(n, order.g = 1, order.h = c(1,1,0),
   \item{garch}{\code{NULL} or numeric \code{vector} with the values of the GARCH-coefficients.}
   \item{asym}{\code{NULL} or numeric \code{vector} with the values of the asymmetry-coefficients.}
   \item{xreg}{\code{NULL} or numeric \code{vector} with the values of the X-term.}
+  \item{as.zoo}{\code{logical}. If \code{TRUE}, then the returned result is of class \code{\link{zoo}}.}
   \item{verbose}{\code{logical}, if \code{TRUE}, the conditional variance and innovations are also returned.}
   \item{innovations}{\code{NULL} or numeric \code{vector} with the innovations. If \code{NULL}, then standard normal innovations are generated with \code{\link{rnorm}}.}
 }
 
-\value{A numeric \code{vector} or \code{matrix} with the simulated values.}
+\value{An object of class 'zoo' (if \code{as.zoo = TRUE}), otherwise a vector or a matrix 
+(if \code{verbose = TRUE}), with the simulated values.}
 
 \author{Susana Campos-Martins}
 

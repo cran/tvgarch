@@ -1,0 +1,22 @@
+print.tvgarchTest <- function (x, ...) 
+{
+  cat("\n")
+  cat("Date:", x$date, "")
+  cat("\n")
+  cat("Testing GARCH(1,1), i.e., the model under H0, against 
+  TV-GARCH(1,1), i.e., the model under H1: \n")
+  cat("\n")
+  cat("Estimation results for model under H0:")
+  summary.tvgarch(object = x$garch11)
+  cat("\n")
+  cat("Transition variable in TV-GARCH(1,1):", colnames(x$xtv), "\n")
+  cat("\n")
+  cat("Results from the Non-Robust TR^2 Test: \n\n")
+  print(x$mat)
+  cat("\n")
+  cat("Results from the Robust TR^2 Test: \n\n")
+  print(x$matRob)
+  cat("\n")
+  print(x$order.g)
+  invisible(x$order.g)
+}

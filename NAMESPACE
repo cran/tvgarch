@@ -14,6 +14,11 @@ importFrom(
 )
 
 importFrom(
+
+	"graphics", "lines", "par", "title"
+)
+
+importFrom(
 	
 	"utils", "toLatex", "tail"
 )
@@ -23,19 +28,24 @@ export(
 
 	# main functions: 
 	"tv", "tvgarchSim", "tvgarchTest", "tvObj", "garchObj", "tvgarch", 
-	"mtvgarchSim", "mtvgarch", 
-
-
-	# extraction functions: 
-	"coef.tvgarch", "fitted.tvgarch", "logLik.tvgarch", "nobs.tvgarch", 
-	"predict.tvgarch", "print.tvgarch", "quantile.tvgarch", 
-	"residuals.tvgarch", "toLatex.tvgarch", "vcov.tvgarch",
-	"coef.mtvgarch", "fitted.mtvgarch", "logLik.mtvgarch", 
-	"nobs.mtvgarch", "predict.mtvgarch", "print.mtvgarch", 
-	"quantile.mtvgarch", "residuals.mtvgarch", "toLatex.mtvgarch",
-	"vcov.mtvgarch"
+	"mtvgarchSim", "mtvgarch"
 )
     
+# methods for class tvgarchTest:
+
+S3method("coef", "tvgarchTest")
+S3method("fitted", "tvgarchTest")
+S3method("logLik", "tvgarchTest")
+S3method("nobs", "tvgarchTest")
+S3method("predict", "tvgarchTest")
+S3method("print", "tvgarchTest")
+S3method("quantile", "tvgarchTest")
+S3method("residuals", "tvgarchTest")
+S3method("toLatex", "tvgarchTest")
+S3method("vcov", "tvgarchTest")
+S3method("plot", "tvgarchTest")
+S3method("summary", "tvgarchTest")
+
 # methods for class tvgarch:
 
 S3method("coef", "tvgarch")
@@ -48,6 +58,9 @@ S3method("quantile", "tvgarch")
 S3method("residuals", "tvgarch")
 S3method("toLatex", "tvgarch")
 S3method("vcov", "tvgarch")
+S3method("plot", "tvgarch")
+S3method("summary", "tvgarch")
+
 
 # methods for class mtvgarch:
 
@@ -61,3 +74,5 @@ S3method("quantile", "mtvgarch")
 S3method("residuals", "mtvgarch")
 S3method("toLatex", "mtvgarch")
 S3method("vcov", "mtvgarch")
+S3method("plot", "mtvgarch")
+S3method("summary", "mtvgarch")

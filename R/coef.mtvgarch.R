@@ -1,18 +1,39 @@
-coef.mtvgarch <- function(object, ...)
+coef.mtvgarch <- function (object, spec = c("sigma2", "tv", "garch", "cc"), ...)
 {
-  results <- list()
-  m <- ncol(object$y)
-  for(i in 1:m){
-    object.i <-object$Objs[[paste("obj", i, sep = "")]]
-    if (!is.null(object$order.g) && object$order.g[i,1] != 0) results[[paste("tvgarch", i, sep = "")]] <- coef.tvgarch(object = object.i)
-    if (is.null(object$order.g[i,1]) || object$order.g[i,1] == 0){ 
-      results[[paste("garch", i, sep = "")]] <- coef.garchx(object = object.i)
+  spec <- match.arg(spec)
+  if (spec == "sigma2") {
+    if (!is.null(object$order.g) && any(object$order.g != 0)) {
+      results <- cbind(object$par.g, object$par.h)
+    }
+    else {
+      results <- object$par.h
+    }
+  }
+  else if (spec == "tv") {
+    if (!is.null(object$order.g) && any(object$order.g != 0)) {
+      results <- object$par.g
+    }
+    else {
+      stop ("Only GARCH models have been estimated.")
+    }
+  }
+  else if (spec == "garch") {
+    if (!is.null(object$order.g) && any(object$order.g != 0)) {
+      results <- object$par.h
+    }
+    else {
+      results <- object$par.h
+      warning ("Only GARCH models have been estimated.")
     }
   }  
-  if (is.null(object$par.dcc)) results$ccc = object$ccc[1,]
-  if (!is.null(object$par.dcc)) {
-    results$Qbar <- (1 - object$par.dcc[1] - object$par.dcc[2]) * object$ccc[1,]
-    results$dcc = object$par.dcc
-  }
+  else if (spec == "cc") {
+    if (is.null(object$par.dcc)) {
+      results = object$ccc[1,]
+    }
+    if (!is.null(object$par.dcc)) {
+      results$Qbar <- (1 - object$par.dcc[1] - object$par.dcc[2])*object$ccc[1,]
+      results = object$par.dcc
+    }
+  } 
   return(results)
 }
