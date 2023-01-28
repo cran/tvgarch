@@ -24,7 +24,11 @@ tvgarchSim <- function(n, order.g = 1, order.h = c(1,1,0), intercept.g = 1.2,
     if (is.null(xtv)) xtv <- (1:n)/n
     G <- matrix(1, n, s)
     for (j in 1:s) {
-      G[,j] <- tv(speed = speed[j], location = location[(sum(order.g[1:j])-order.g[j]+1):sum(order.g[1:j])], xtv = xtv, opt = opt, order.g = order.g[j])
+      G[,j] <- 
+        tv(speed = speed[j], 
+           location = location[(sum(order.g[1:j])-
+                                  order.g[j]+1):sum(order.g[1:j])], xtv = xtv, 
+           opt = opt, order.g = order.g[j])
     }
     g <- intercept.g + G %*% size
     colnames(g) <- "g"
@@ -33,8 +37,9 @@ tvgarchSim <- function(n, order.g = 1, order.h = c(1,1,0), intercept.g = 1.2,
   '
     Constructing the h component
   '
-  hSim <- garchxSim(n = n, intercept = intercept.h, arch = arch, garch = garch, asym = asym, xreg = xreg, 
-                    innovations = innovations, as.zoo = FALSE, verbose = TRUE)
+  hSim <- garchxSim(n = n, intercept = intercept.h, arch = arch, garch = garch, 
+                    asym = asym, xreg = xreg, innovations = innovations, 
+                    as.zoo = FALSE, verbose = TRUE)
   h <- as.matrix(hSim[,"sigma2"])
   colnames(h) <- "h"
   innovations <- as.matrix(hSim[,"innovations"])

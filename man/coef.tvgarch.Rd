@@ -13,17 +13,17 @@
 \alias{toLatex.tvgarch}
 \alias{vcov.tvgarch}
 
-\title{Extraction functions for univarate 'tvgarch' objects}
+\title{Extraction functions (S3 methods) for univarate 'tvgarch' objects}
 
-\description{Extraction functions for objects of class 'tvgarch'.}
+\description{Extraction functions (S3 methods) for objects of class 'tvgarch'.}
 
 \usage{
-  \method{coef}{tvgarch}(object, spec = c("sigma2", "tv", "garch"), ...)
-  \method{fitted}{tvgarch}(object, spec = c("sigma2", "tv", "garch"), 
+  \method{coef}{tvgarch}(object, spec = c("tvgarch", "garch", "tv"), ...)
+  \method{fitted}{tvgarch}(object, spec = c("tvgarch", "garch", "tv"), 
                             as.zoo = TRUE, ...)
   \method{logLik}{tvgarch}(object, ...)
   \method{nobs}{tvgarch}(object, ...)
-  \method{plot}{tvgarch}(x, spec = c("sigma2", "tv", "garch"), ...)                            
+  \method{plot}{tvgarch}(x, spec = c("tvgarch", "garch", "tv"), ...)                            
   \method{predict}{tvgarch}(object, n.ahead = 10, newxtv = NULL, 
                              newxreg = NULL, newindex = NULL, n.sim = 5000, 
                              as.zoo = TRUE, verbose = FALSE, ...)
@@ -33,16 +33,16 @@
   \method{residuals}{tvgarch}(object, as.zoo = TRUE, ...)
   \method{summary}{tvgarch}(object, ...)
   \method{toLatex}{tvgarch}(object, digits = 4, ...)
-  \method{vcov}{tvgarch}(object, spec = c("sigma2", "tv", "garch"), ...)
+  \method{vcov}{tvgarch}(object, spec = c("tvgarch", "garch", "tv"), ...)
 }
 
 \arguments{
   \item{object}{an object of class 'tvgarch'.}
   \item{spec}{specifies whether the function should extract specific results. If 
   "tv", extracts results for the TV component and if "garch" extracts results 
-  for the GARCH-X component of TV-GARCH-X model. If "sigma2", extracts 
+  for the GARCH-X component of TV-GARCH-X model. If "tvgarch", extracts 
   results for TV-GARCH-X model. Only relevant for TV-GARCH-X models. 
-  Otherwise, extracts results for GARCH-X model.}
+  Otherwise, extracts results for GARCH-X models.}
   \item{x}{an object of class 'tvgarch'.}
   \item{as.zoo}{logical. If \code{TRUE}, then the returned result is of 
   class \code{\link{zoo}}.}

@@ -81,6 +81,8 @@ verbose = FALSE, innovations = NULL)
 }
 
 \examples{
+set.seed(12345)
+
 ## Simulate from a bivariate CCC-TV(1)-GARCH(1,1) model (default):
 mySim1 <- mtvgarchSim(n = 1500)
 

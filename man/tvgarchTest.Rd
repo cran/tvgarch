@@ -39,7 +39,7 @@ Econometric Reviews 36:4, 421-446.}
 }
 
 \examples{
-set.seed(123)
+set.seed(12345)
 
 ## Simulate from a TV(1)-GARCH(1,1) model (default):
 ySim <- tvgarchSim(n = 1500)

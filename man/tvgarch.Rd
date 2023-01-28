@@ -17,7 +17,8 @@ consistent and asymptotically normal estimates.
 
 \usage{
 tvgarch(y, order.g = 1, order.h = c(1,1,0), xtv = NULL, xreg = NULL, 
-        initial.values = list(), opt = 2, turbo = FALSE, trace = FALSE)
+        initial.values = list(), opt = 2, upper.speed = NULL, tvgarch = FALSE,
+        turbo = FALSE, trace = FALSE)
 }
 
 \arguments{
@@ -52,6 +53,14 @@ covariates in the GARCH-X component.}
 \item{opt}{\code{integer} indicating whether the speed parameter in the TV 
 component should be scaled. If 0, no scaling; if 1, \code{speed}/sd(\code{xtv}); 
 if 2, exp(\code{speed}). Only relevant for TV-GARCH models.}
+\item{upper.speed}{\code{NULL} or numeric \code{scalar} that sets 
+the upper bound for \code{speed} in each transition function. If \code{NULL}, 
+the default, the upper bound is 10000 for all transition functions. 
+If numeric \code{scalar}, \code{upper.speed} is used for all transition 
+functions.}
+\item{tvgarch}{\code{logical}. If \code{TRUE}, the full parameter set
+is estimated in one final step as well as the standard errors. If \code{FALSE} 
+(default), estimates from last iteration are reported instead.}
 \item{turbo}{\code{logical}. If \code{FALSE} (default), then the coefficient 
 variance-covariance is computed during estimation, and the fitted values and 
 residuals are attached to the returned object. If \code{TRUE}, then these 

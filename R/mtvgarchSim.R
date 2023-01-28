@@ -290,9 +290,10 @@ mtvgarchSim <- function (n, m = 2, order.g = c(1,1), order.h = c(1,1,0, 1,1,0),
   y <- sqrt(sigma2)*innovations
   colnames(y) <- names.ID
   if (spillovers == TRUE) {
+    names.ID2 <- paste("phi", 1:m, sep = "")
     m.y2 <- colMeans(y^2)
     xreg <- rbind(m.y2, y[-n,]^2)
-    colnames(xreg) <- paste("lag(", names.ID, ",^2)", sep = "")
+    colnames(xreg) <- paste("lag(", names.ID2, ",^2, 1)", sep = "")
   }
   if (as.zoo == TRUE) {
     y <- zoo(y, order.by = index(y))

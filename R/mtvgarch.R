@@ -1,10 +1,11 @@
 mtvgarch <-  function (y, order.g = c(1,1), order.h = NULL, order.x = NULL,
                        initial.values = list(), xtv = NULL, xreg = NULL, 
-                       opt = 2, dcc = FALSE, turbo = TRUE, trace = FALSE)
+                       opt = 2, upper.speed = NULL, tvgarch = FALSE, 
+                       dcc = FALSE, turbo = TRUE, trace = FALSE)
 {
-    y <- as.matrix(y)
-    if (ncol(y) == 1) stop("For univariate models, use tvgarch().")
     y.index <- index(y)
+    y <- as.matrix(y) 
+    if (ncol(y) == 1) stop("For univariate models, use tvgarch().")
     n <- nrow(y)
     m <- ncol(y)
     if (is.null(colnames(y))) colnames(y) <- paste("y", 1:m, sep = "")
@@ -266,6 +267,7 @@ mtvgarch <-  function (y, order.g = c(1,1), order.h = NULL, order.x = NULL,
       else turbo2 <- turbo
       tvgarch.i <- tvgarch(y = yi.i, order.g = order.g.i, order.h = order.h[i,], 
                            xtv = xtv, xreg = xreg.i, opt = opt, 
+                           upper.speed = upper.speed, tvgarch = tvgarch,
                            initial.values = list(intercept.g = intercept.g.i, 
                                                  size = size.i, speed = speed.i, 
                                                  location = location.i, 
@@ -274,6 +276,7 @@ mtvgarch <-  function (y, order.g = c(1,1), order.h = NULL, order.x = NULL,
                                                  asym = asym.i, 
                                                  par.xreg = par.xreg.i),  
                            turbo = turbo2, trace = trace)
+      tvgarch.i$y.index = y.index
       Objs[[paste("obj", i, sep = "")]] <- tvgarch.i
       '
         Saving estimated parameters
@@ -389,6 +392,7 @@ mtvgarch <-  function (y, order.g = c(1,1), order.h = NULL, order.x = NULL,
             tvgarch.i <- tvgarch(y = yi.i, order.g = order.g.i, 
                                  order.h = order.h[i,], xtv = xtv, 
                                  xreg = xreg.i, opt = opt, 
+                                 upper.speed = upper.speed, tvgarch = tvgarch,
                                  initial.values = list(intercept.g = 
                                                          intercept.g.i, 
                                                        size = size.i, 
@@ -564,7 +568,7 @@ mtvgarch <-  function (y, order.g = c(1,1), order.h = NULL, order.x = NULL,
                     spillovers = spillovers, y = y, y.index = y.index, 
                     names.y = names.y, date = date(), turbo = turbo, 
                     trace = trace)
-    if (is.null(par.dcc)) results$ccc = ccc
+    results$ccc <- ccc
     if (!is.null(par.dcc)) {
       results$dcc <- dcc
       results$par.dcc <- par.dcc

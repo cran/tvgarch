@@ -1,6 +1,7 @@
 tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL, 
                      xreg = NULL, initial.values = list(), opt = 2, 
-                     turbo = FALSE, trace = FALSE)
+                     upper.speed = NULL, tvgarch = FALSE, turbo = FALSE, 
+                     trace = FALSE)
 {
   n <- length(y)
   y.index <- index(y)
@@ -33,8 +34,22 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
     else intercept.g <- initial.values$intercept.g
     if (is.null(initial.values$size)) size <- rep(0.1, s)
     else size <- initial.values$size
-    if (is.null(initial.values$speed)) speed <- rep(1, s)
+    if (is.null(initial.values$speed)) {
+      speed <- rep(10, s)
+      if (opt == 1) speed <- speed/sd(xtv)
+      if (opt == 2) speed <- log(speed)
+    }
     else speed <- initial.values$speed
+    if (!is.null(upper.speed)) {
+      if (length(upper.speed) != 1) {
+        warning("Using only first upper bound for speed.")
+        upper.speed <- upper.speed[1]
+      }
+      upper.speed <- rep(upper.speed, s)
+    }
+    if (is.null(upper.speed)) upper.speed <- rep(250, s)
+    if (opt == 1) upper.speed <- upper.speed/sd(xtv)
+    if (opt == 2) upper.speed <- log(upper.speed)
     if (is.null(initial.values$location)) {
       location <- NULL
       for (i in 1:s) {
@@ -126,7 +141,7 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
   colnames(initial.h) <- names.h
   rownames(initial.h) <- "Value:"
   if (trace == TRUE) {
-    cat("\n Initial parameters in the h component\n\n")
+    cat("\n Initial parameters for the h component\n\n")
     print(round(initial.h, 4))
   }
   '
@@ -161,7 +176,7 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
     colnames(initial.g) <- names.g
     rownames(initial.g) <- "Value:"
     if (trace == TRUE) {
-      cat("\n Initial parameters in the g component:\n\n")
+      cat("\n Initial parameters for the g component:\n\n")
       print(round(initial.g, 4))
     }
     '
@@ -188,12 +203,9 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
     r4 <- r[(2+s):(2*s+1),]
     r5 <- r[(2*s+2):npar.g,]
     ui.g <- rbind(ui.g, r4, -r4, r5, -r5)
-    if (opt != 2) ci.g <- c(ci.g, rep(1e-5, s), rep(-250, s), rep(min(xtv)+1e-3, 
-                                                                  sum(order.g)), 
-                            rep(-max(xtv)+1e-3, sum(order.g))) 
-    if (opt == 2) ci.g <- c(ci.g, rep(log(1e-5), s), rep(-log(250), s), 
-                            rep(min(xtv)+1e-3, sum(order.g)), rep(-max(xtv)+1e-3, 
-                                                                  sum(order.g))) 
+    ci.g <- c(ci.g, rep(1e-5, s), -upper.speed, rep(min(xtv)+1e-3,
+                                                            sum(order.g)),
+              rep(-max(xtv)+1e-3, sum(order.g))) 
     if (any(order.g > 1)) {
       for (i in which(order.g > 1)) {
         r6 <- -r[(1+2*s+sum(order.g[1:i]) - 
@@ -220,19 +232,20 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
     colnames(estimates) <- names.g
     rownames(estimates) <- "Value:"
     if (trace == TRUE) {
-      cat("\n Initial estimation for the g component:\n\n")
+      cat("\n Initial estimates for the g component:\n\n")
       if (turbo == TRUE) print(round(estimates[1,], 4))
       else print(round(estimates, 4))
     }
     '
       Parameter constraints for g component and iter > 0
     '
-    par.hat.g <- par.hat0.g[-c(1,(s+2):(2*s+1))]
-    par.hat0.g <- par.hat0.g[c(1,(s+2):(2*s+1))]
+    par.hat.g <- par.hat0.g[-1]
+    par.hat0.g <- par.hat0.g[1]
     r <- diag(length(par.hat.g))
-    ui.g <- rbind(r[(s+1):(npar.g-s-1),], -r[(s+1):(npar.g-s-1),])
-    ci.g <- c(rep(min(xtv)+1e-3, sum(order.g)), rep(-max(xtv)+1e-3, 
-                                                    sum(order.g))) 
+    ui.g <- rbind(r[(s+1):(2*s),], -r[(s+1):(2*s),], r[(2*s+1):(npar.g-1),], 
+                  -r[(2*s+1):(npar.g-1),])
+    ci.g <- c(rep(1e-5, s), -upper.speed, rep(min(xtv)+1e-3, sum(order.g)), 
+              rep(-max(xtv)+1e-3, sum(order.g))) 
     if (s == 1) {
       r1 <- r[1,]
       ui.g <- rbind(ui.g, r1)
@@ -247,8 +260,9 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
     }
     if (any(order.g > 1)) {
       for(i in which(order.g > 1)){
-        r2 <- -r[(s+sum(order.g[1:i])-order.g[i]+1):(s+sum(order.g[1:i])-1),] + 
-          r[(s+sum(order.g[1:i])-order.g[i]+2):(s+sum(order.g[1:i])),]
+        r2 <- 
+          -r[(2*s+sum(order.g[1:i])-order.g[i]+1):(2*s+sum(order.g[1:i])-1),] + 
+          r[(2*s+sum(order.g[1:i])-order.g[i]+2):(2*s+sum(order.g[1:i])),]
         ui.g <- rbind(ui.g, r2)
         ci.g <- c(ci.g, rep(0, order.g[i]-1)) 
       }
@@ -309,8 +323,7 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
         }
       }
     }
-    par.hat.g <- c(par.hat0.g[1], iter.fit.g$par[1:s], par.hat0.g[-1], 
-                   iter.fit.g$par[-(1:s)])
+    par.hat.g <- c(par.hat0.g, iter.fit.g$par)
     if (turbo == TRUE) {
       vcov.g <- NULL
       robse.par.g <- rep(NA_real_, length(par.hat.g))
@@ -319,9 +332,9 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
       '
           TV variance-covariance matrix:
       '
-      vcov.g <- matrix(NA_real_, npar.g, npar.g)
-      rownames(vcov.g) <- names.g
-      colnames(vcov.g) <- names.g
+      vcov.g <- matrix(NA_real_, npar.g-1, npar.g-1)
+      rownames(vcov.g) <- names.g[-1]
+      colnames(vcov.g) <- names.g[-1]
       jac.g <- jacobian(func = tvObj, x = iter.fit.g$par, 
                         fixed.par.g = par.hat0.g, xtv = xtv, opt = opt, 
                         order.g = order.g, fixed.h = h, y = y, iter0 = FALSE, 
@@ -333,8 +346,10 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
                         flag = 1)
       solHG <- solve(-H.g)
       vcov.iter <- solHG %*% J.g %*% solHG
-      vcov.g[c(2:(s+1),(2*s+2):npar.g),c(2:(s+1),(2*s+2):npar.g)] <- vcov.iter
-      robse.par.g <- sqrt(diag(vcov.g))
+      vcov.g <- vcov.iter
+      robse.par.g <- c(NA_real_, sqrt(diag(vcov.g)))
+      rownames(vcov.g) <- names.g[-1]
+      colnames(vcov.g) <- names.g[-1]
     }
     '
       TV final parameter estimates:
@@ -358,7 +373,7 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
     '
       GJR-GARCH-X variance-covariance matrix:
     '
-    vcov.h <- vcov.garchx(iter.fit.h)
+    vcov.h <- vcov.garchx(iter.fit.h, vcov.type = "robust")
     robse.par.h <- sqrt(diag(vcov.h))
   }
   '
@@ -368,22 +383,84 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
   rownames(estimates.h) <- c("Estimate:", "Std. Error:")
   colnames(estimates.h) <- names.h
   '
+    TV-GJR-GARCH-X final parameter estimates:
+  '
+  if (!is.null(order.g)) {
+    par.ini <- c(estimates.g[1,-1],estimates.h[1,])
+    r <- diag(length(par.ini))
+    ui.gh <- cbind(ui.g, matrix(0, nrow(ui.g), npar.h))
+    ci.gh <- ci.g
+    ui.gh <- rbind(ui.gh, r[-(1:ncol(ui.g)),])
+    ci.gh <- c(ci.gh, rep(0, npar.h)) 
+    iter.fit <- constrOptim(theta = par.ini, f = tvgarchObj, grad = NULL, 
+                            ui = ui.gh, ci = ci.gh, 
+                            fixed.par.g = par.hat0.g[1], y = y, 
+                            order.g = order.g, xtv = xtv, opt = opt, 
+                            iter.fit.h = iter.fit.h, flag = 1)
+    par <- iter.fit$par
+    if (turbo == TRUE) {
+      vcov <- NULL
+      robse.par <- rep(NA_real_, length(iter.fit$par))
+    }
+    if (turbo == FALSE) {
+      jac <- jacobian(func = tvgarchObj, x = iter.fit$par, 
+                      fixed.par.g = estimates.g[1,1], y = y, order.g = order.g, 
+                      xtv = xtv, opt = opt, iter.fit.h = iter.fit.h, flag = 0)
+      JJ <- crossprod(jac)  
+      HH <-  optimHess(par = iter.fit$par, fn = tvgarchObj, 
+                       fixed.par.g = estimates.g[1,1], y = y, order.g = order.g, 
+                       xtv = xtv, opt = opt, iter.fit.h = iter.fit.h, flag = 1)
+      solHG <- solve(-HH)
+      vcov <- solHG %*% JJ %*% solHG
+      colnames(vcov) <- names(iter.fit$par)
+      rownames(vcov) <- names(iter.fit$par)
+      robse.par <- sqrt(diag(vcov))
+    }
+  }
+  '
     TV-GJR-GARCH-X output:
   '
+  par.h = estimates.h[1,]
+  se.h = estimates.h[2,]
+  if (!is.null(order.g)) {
+    if (tvgarch == TRUE) {
+      n <- length(xtv)  
+      par.g <- c(estimates.g[1,1], par[1:(2*s+sum(order.g))])
+      par.h <- par[-(1:(2*s+sum(order.g)))]
+      G <- matrix(1, n, s)
+      for (i in 1:s) {
+        G[,i] <- 
+          tv(speed = par.g[1+s+i], 
+             location = par.g[(1+2*s+sum(order.g[1:i])-
+                                 order.g[i]+1):(1+2*s+sum(order.g[1:i]))], 
+             xtv = xtv, opt = opt, order.g = order.g[i])
+      }
+      g <- par.g[1] + G %*% par.g[2:(s+1)]
+      h <- garchxRecursion(pars = as.numeric(par.h), aux = iter.fit.h)
+      se.g <- c(NA_real_, robse.par[1:(2*s+sum(order.g))])
+      se.h <- robse.par[-(1:(2*s+sum(order.g)))]
+    }
+    else {
+      par.g = estimates.g[1,]
+      se.g = estimates.g[2,]
+    }
+  }
   sigma2 <- as.matrix(h*g)
   colnames(sigma2) <- "sigma2"
   logLik <- sum(dnorm(x = y, mean = 0, sd = sqrt(sigma2), log = TRUE))
   residuals <- as.matrix(y/sqrt(sigma2))
   colnames(residuals) <- "innovations"
-  results <- list(par.h = estimates.h[1,], se.h = estimates.h[2,], 
+  results <- list(par.h = par.h, se.h = se.h, 
                   names.h = names.h, sigma2 = sigma2, residuals = residuals, 
                   h = h, g = g, logLik = logLik, vcov.h = vcov.h, 
                   message.h = iter.fit.h$message, order.g = order.g, 
                   order.h = order.h, xreg = xreg, y = y, y.index = y.index, 
-                  date = date(), turbo = turbo, aux.h = aux.h)
+                  date = date(), turbo = turbo, aux.h = aux.h, 
+                  iter.fit.h = iter.fit.h, tvgarch = tvgarch)
   if (!is.null(order.g)) {
-    results$par.g = estimates.g[1,]
-    results$se.g = estimates.g[2,]
+    results$vcov = vcov
+    results$par.g = par.g
+    results$se.g = se.g
     results$names.g = names.g
     results$vcov.g = vcov.g
     results$message.g = iter.fit.g$message
@@ -394,6 +471,6 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
   class(results) <- "tvgarch"
   return(results)
 } 
-
+ 
 
 

@@ -13,7 +13,9 @@ dccObj <- function (par.dcc, z, sigma2, flag)
     invQt <- diag( 1 / sqrt( diag(Qt) ) )
     Rt  <- invQt %*% Qt %*% invQt
     zt2 <- z[t,] %o% z[t,]
-    if (flag != 2) ll[t] <- - 0.5 * (m * log(2*pi) + sum(log(sigma2[t,])) + log(det(Rt)) + sum((z[t,] %*% solve(Rt)) * z[t,])) 
+    if (flag != 2) ll[t] <- - 0.5 * (m * log(2*pi) + sum(log(sigma2[t,])) + 
+                                       log(det(Rt)) + 
+                                       sum((z[t,] %*% solve(Rt)) * z[t,])) 
     if (flag == 2) dcc[t,] <- Rt[lower.tri(Rt)]
   }
   

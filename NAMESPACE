@@ -10,7 +10,8 @@ importFrom(
 
 	"stats", "lm", "pchisq", "cor", "sd", "coef", "dnorm",
 	"fitted", "logLik", "constrOptim", "nobs", "pnorm", "vcov",
-	"quantile", "residuals", "rnorm", "runif", "predict", "optimHess"
+	"quantile", "residuals", "rnorm", "runif", "predict", 
+	"optimHess"
 )
 
 importFrom(
@@ -27,8 +28,8 @@ importFrom(
 export(
 
 	# main functions: 
-	"tv", "tvgarchSim", "tvgarchTest", "tvObj", "garchObj", "tvgarch", 
-	"mtvgarchSim", "mtvgarch"
+	"tv", "tvgarchSim", "tvgarchTest", "tvObj", "garchObj", "tvgarchObj", 
+	"tvgarch", "mtvgarchSim", "mtvgarch"
 )
     
 # methods for class tvgarchTest:

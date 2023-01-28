@@ -1,5 +1,5 @@
-tv <- function (speed, location, xtv = NULL, n = NULL, opt = 0, 
-                order.g = NULL, as.zoo = TRUE, verbose = FALSE)
+tv <- function (speed, location, xtv = NULL, n = NULL, opt = 0, order.g = NULL, 
+                as.zoo = TRUE, verbose = FALSE)
 {
   if( is.null(order.g) ){ 
     order.g <- length(location) 

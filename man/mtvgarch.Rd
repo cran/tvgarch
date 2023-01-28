@@ -15,8 +15,8 @@ maximum likelihood.
 
 \usage{
 mtvgarch(y, order.g = c(1, 1), order.h = NULL, order.x = NULL, 
-initial.values = list(), xtv = NULL, xreg = NULL, opt = 2, dcc = FALSE, 
-turbo = TRUE, trace = FALSE)
+initial.values = list(), xtv = NULL, xreg = NULL, opt = 2, upper.speed = NULL,
+tvgarch = FALSE, dcc = FALSE, turbo = TRUE, trace = FALSE)
 }
 
 \arguments{
@@ -52,6 +52,14 @@ scaled between 0 and 1, is used as the transition variable.}
 in the GARCH-X component.}
 \item{opt}{integer indicating whether the speed parameter in the TV component 
 should be scaled. If 0, no scaling; if 1, speed/sd(xtv); if 2, exp(speed).}
+\item{upper.speed}{\code{NULL} or numeric \code{scalar} that sets 
+the upper bound for \code{speed} in each transition function. If \code{NULL}, 
+the default, the upper bound is 10000 for all transition functions. 
+If numeric \code{scalar}, \code{upper.speed} is used for all transition 
+functions.}
+\item{tvgarch}{\code{logical}. If \code{TRUE}, the full parameter set
+is estimated in one final step as well as the standard errors. If \code{FALSE} 
+(default), estimates from last iteration are reported instead.}
 \item{dcc}{logical. If \code{TRUE}, dynamic conditional correlations are 
 estimated. If \code{FALSE} (default), then the conditional correlations are 
 constant.}
@@ -90,7 +98,7 @@ Journal of Business and Economic Statistics 20, 339-350.
 }
 
 \examples{
-set.seed(123)
+set.seed(12345)
 
 ## Simulate from a bivariate CCC-TV(1)-GARCH(1,1) model (default):
 mySim <- mtvgarchSim(n = 1000)

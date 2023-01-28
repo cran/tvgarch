@@ -18,12 +18,12 @@
 \description{Extraction functions for objects of class 'mtvgarch'.}
 
 \usage{
-  \method{coef}{mtvgarch}(object, spec = c("sigma2", "tv", "garch", "cc"), ...)
-  \method{fitted}{mtvgarch}(object, spec = c("sigma2", "tv", "garch", "cc"), 
+  \method{coef}{mtvgarch}(object, spec = c("tvgarch", "garch", "tv", "cc"), ...)
+  \method{fitted}{mtvgarch}(object, spec = c("tvgarch", "garch", "tv", "cc"), 
                              as.zoo = TRUE, ...)
   \method{logLik}{mtvgarch}(object, ...)
   \method{nobs}{mtvgarch}(object, ...)
-  \method{plot}{mtvgarch}(x, spec = c("sigma2", "tv", "garch"), ...)                           
+  \method{plot}{mtvgarch}(x, spec = c("tvgarch", "garch", "tv"), ...)                           
   \method{predict}{mtvgarch}(object, n.ahead = 10, newxtv = NULL, 
                               newxreg = NULL, newindex = NULL, n.sim = 5000, 
                               as.zoo = TRUE, verbose = FALSE, ...)
@@ -32,16 +32,16 @@
   \method{residuals}{mtvgarch}(object, as.zoo = TRUE, ...)
   \method{summary}{mtvgarch}(object, ...)
   \method{toLatex}{mtvgarch}(object, digits = 4, ...)
-  \method{vcov}{mtvgarch}(object, spec = c("sigma2", "tv", "garch", "cc"), ...)
+  \method{vcov}{mtvgarch}(object, spec = c("tvgarch", "garch", "tv", "cc"), ...)
 }
 
 \arguments{
   \item{object}{an object of class 'mtvgarch'.}
   \item{spec}{specifies whether the function should extract specific results. If 
   "tv", extracts results for the TV component and if "garch" extracts results 
-  for the GARCH-X component of TV-GARCH-X model. If "sigma2", extracts 
+  for the GARCH-X component of TV-GARCH-X model. If "tvgarch", extracts 
   results for TV-GARCH-X model. Only relevant for TV-GARCH-X models. 
-  Otherwise, extracts results for GARCH-X model. If "cc", extracts results 
+  Otherwise, extracts results for GARCH-X models. If "cc", extracts results 
   concerning the conditional correlations. "cc" is not valid in plot.mtvgarch().}
   \item{x}{an object of class 'mtvgarch'.}
   \item{as.zoo}{logical. If \code{TRUE}, then the returned result is of class 
@@ -99,7 +99,7 @@ volatility models equation by equation, J. R. Stat. Soc. Ser. B Stat. Methodol
 }
 
 \examples{
-set.seed(123)
+set.seed(12345)
 
 ## Simulate from a bivariate CCC-TV(1)-GARCH(1,1) model (default):
 mySim <- mtvgarchSim(n = 1500)
