@@ -23,7 +23,7 @@ correlations are allowed.
   Package: \tab tvgarch\cr
   Type: \tab Package\cr
   Version: \tab 2.3\cr
-  Date: \tab 2023-01-18 \cr
+  Date: \tab 2023-03-07 \cr
   License: \tab GPL>=2\cr
   }
 }

@@ -4,7 +4,6 @@
 import("zoo")
 import("garchx")
 import("numDeriv")
-import("hier.part")
 
 importFrom(
 
@@ -29,7 +28,7 @@ export(
 
 	# main functions: 
 	"tv", "tvgarchSim", "tvgarchTest", "tvObj", "garchObj", "tvgarchObj", 
-	"tvgarch", "mtvgarchSim", "mtvgarch"
+	"tvgarch", "mtvgarchSim", "mtvgarch", "combinations", "combos"
 )
     
 # methods for class tvgarchTest:

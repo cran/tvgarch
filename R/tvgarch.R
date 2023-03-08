@@ -193,7 +193,7 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
       ci.g <- c(ci.g, 1e-5)
     } 
     if (s > 1) {
-      r.size <- combos(s)$binary
+      r.size <- combos(s)
       r3 <- matrix(0, nrow(r.size), npar.g)
       r3[,1] <- 1
       r3[,2:(s+1)] <- r.size
@@ -252,7 +252,7 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
       ci.g <- c(ci.g, -par.hat0.g[1]+1e-5)
     } 
     if (s > 1) {
-      r.size <- combos(s)$binary
+      r.size <- combos(s)
       r1 <- matrix(0, nrow(r.size), length(par.hat.g))
       r1[,1:s] <- r.size
       ui.g <- rbind(ui.g, r1)

@@ -1,3 +1,11 @@
+Version 2.4 (07 March 2023):
+============================
+
+* New functions: combos() and combinations(). The former is a modification of the function combos1() from the package hier.part by Chris Walsh, whereas the latter is from the package gtools.
+
+* Reduced dependency: the package tvgarch does not depend anymore on the packages hier.part and gtools 
+
+
 Version 2.3 (18 January 2023):
 ==============================
 
