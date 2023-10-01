@@ -22,8 +22,8 @@ correlations are allowed.
   \tabular{ll}{
   Package: \tab tvgarch\cr
   Type: \tab Package\cr
-  Version: \tab 2.3\cr
-  Date: \tab 2023-03-07 \cr
+  Version: \tab 2.4.1\cr
+  Date: \tab 2023-10-01 \cr
   License: \tab GPL>=2\cr
   }
 }

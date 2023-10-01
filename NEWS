@@ -1,3 +1,9 @@
+Version 2.4.1 (01 October 2023):
+============================
+
+* Correction: given version disagreed with the actual package version (meta: 2.4, docs: 2.3).
+
+
 Version 2.4 (07 March 2023):
 ============================
 

@@ -1,6 +1,6 @@
-855216936b9411ac1452a6a3d16b8c27 *DESCRIPTION
+d81f5864abe3d9ffcce4c250661021a9 *DESCRIPTION
 8e70834aea8030ea315a757af8724271 *NAMESPACE
-4a423ab8260424ee4987fae7e98b084b *NEWS
+cbd5ee19c5cd6c403fd6d83b5628237c *NEWS
 0ffe22c77cbba34642fedb0446d1240a *R/combos.R
 6f533311270bf0b69fa4eb8f430af131 *R/dccObj.R
 7af81ea8745f5d9dbf892c93bc077f40 *R/garchObj.R
@@ -23,7 +23,7 @@ ef4922d08d6c0e6859cd3db24ee2c494 *man/coef.tvgarch.Rd
 0fb1c1c290cb3a586d896f739e304b96 *man/dccObj.Rd
 a31857cacfc70ba767fd8dca0995e5e1 *man/mtvgarch.Rd
 005be84b7fc2622b15452e4317a300a1 *man/mtvgarchSim.Rd
-c575cefe8f5fe4630f776ce80bb6f93d *man/tvgarch-package.Rd
+2453f8081aaab4a2a76ae740ee1fb85c *man/tvgarch-package.Rd
 a3f83e72426501ecfeb92bc5ad2d9a72 *man/tvgarch.Rd
 b407cf0eefe72171a804d7dcaab79444 *man/tvgarchObj.Rd
 86a4fcb326f4363bc581327dd8fee47e *man/tvgarchSim.Rd
