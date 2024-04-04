@@ -8,9 +8,10 @@
 Simulation, estimation and inference for univariate and multivariate 
 TV(s)-GARCH(p,q,r)-X models, where s indicates the number and shape of the 
 transition functions, p is the ARCH order, q is the GARCH order, r is the 
-asymmetry order, and 'X' indicates that covariates can be included. The TV 
+asymmetry order, and 'X' indicates that covariates can be included; see 
+Campos-Martins and Sucarrat (2024) <doi:10.18637/jss.v108.i09>. The TV 
 long-term component, as in the multiplicative TV-GARCH model of Amado and 
-Ter{\"a}svirta (2013) <doi:10.1016/j.jeconom.2013.03.006>, introduces 
+Terasvirta (2013) <doi:10.1016/j.jeconom.2013.03.006>, introduces 
 non-stationarity whereas the GARCH-X short-term component describes 
 conditional heteroscedasticity. Maximisation by parts leads to consistent 
 and asymptotically normal estimates. In the multivariate case, conditional 
@@ -22,8 +23,8 @@ correlations are allowed.
   \tabular{ll}{
   Package: \tab tvgarch\cr
   Type: \tab Package\cr
-  Version: \tab 2.4.1\cr
-  Date: \tab 2023-10-01 \cr
+  Version: \tab 2.4.2\cr
+  Date: \tab 2024-04-03 \cr
   License: \tab GPL>=2\cr
   }
 }
@@ -33,6 +34,15 @@ Susana Campos-Martins, \url{https://sites.google.com/site/susanacamposmartins}
 \cr\cr
 Maintainer: Susana Campos-Martins \cr
 Contributor: Genaro Sucarrat
+}
+
+\references{
+Cristina Amado and Timo Terasvirta (2013) Modelling volatility by variance 
+decomposition, Journal of Econometrics 175, 142-153. 
+
+Susana Campos-Martins and Genaro Sucarrat (2024) Modeling Nonstationary 
+Financial Volatility with the R Package tvgarch, Journal of Statistical 
+Software 108, 1-38.
 }
 
 \seealso{

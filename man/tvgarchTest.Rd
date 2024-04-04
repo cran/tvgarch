@@ -26,9 +26,11 @@ scaled between 0 and 1 is used as the transition variable.}
 An object of class 'tvgarchTest'.
 }
 
-\references{Cristina Amado and Timo Ter{\"a}svirta (2017) Specification and 
+\references{
+Cristina Amado and Timo Terasvirta (2017) Specification and 
 testing of multiplicative time varying GARCH models with applications, 
-Econometric Reviews 36:4, 421-446.}
+Econometric Reviews 36:4, 421-446.
+}
 
 \author{Susana Campos-Martins}
 

@@ -81,11 +81,16 @@
 }
 
 \references{
-Cristina Amado and Timo Ter{\"a}svirta (2013) Modelling volatility by variance 
+Cristina Amado and Timo Terasvirta (2013) Modelling volatility by variance 
 decomposition, Journal of Econometrics 175, 142-153. 
-Christian Francq and Jean-Michel Zako{\"i}an (2016) Estimating multivariate 
+
+Christian Francq and Jean-Michel Zakoian (2016) Estimating multivariate 
 volatility models equation by equation, J. R. Stat. Soc. Ser. B Stat. Methodol 
 78, 613-635.
+
+Susana Campos-Martins and Genaro Sucarrat (2024) Modeling Nonstationary 
+Financial Volatility with the R Package tvgarch, Journal of Statistical 
+Software 108, 1-38.
 }
 
 \author{Susana Campos-Martins}

@@ -24,6 +24,16 @@ The values of the objective function or fitted dynamic conditional correlations.
 
 \author{Susana Campos-Martins}
 
+\references{
+Susana Campos-Martins and Genaro Sucarrat (2024) Modeling Nonstationary 
+Financial Volatility with the R Package tvgarch, Journal of Statistical 
+Software 108, 1-38.
+
+Robert F. Engle (2002) Dynamic conditional correlation: A simple class of 
+multivariate generalized autoregressive conditional heteroskedasticity models, 
+Journal of Business and Economic Statistics 20, 339-350.
+}
+
 \seealso{
 \code{\link{mtvgarch}}, \code{\link{fitted.mtvgarch}}, \code{\link{residuals.mtvgarch}} 
 }

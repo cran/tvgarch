@@ -77,11 +77,16 @@ An object of class 'tvgarch'.
 }
 
 \references{
-Cristina Amado and Timo Ter{\"a}svirta (2013) Modelling volatility by variance 
+Cristina Amado and Timo Terasvirta (2013) Modelling volatility by variance 
 decomposition, Journal of Econometrics 175, 142-153. 
-Cristina Amado and Timo Ter{\"a}svirta (2014) Modelling changes in the 
+
+Cristina Amado and Timo Terasvirta (2014) Modelling changes in the 
 unconditional variance of long stock return series, Journal of Empirical Finance 
 25, 15-35. 
+
+Susana Campos-Martins and Genaro Sucarrat (2024) Modeling Nonstationary 
+Financial Volatility with the R Package tvgarch, Journal of Statistical 
+Software 108, 1-38.
 }
 
 \author{Susana Campos-Martins}
