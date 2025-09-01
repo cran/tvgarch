@@ -35,7 +35,9 @@ Journal of Business and Economic Statistics 20, 339-350.
 }
 
 \seealso{
-\code{\link{mtvgarch}}, \code{\link{fitted.mtvgarch}}, \code{\link{residuals.mtvgarch}} 
+\code{\link{mtvgarch}}, 
+\code{\link{fitted.mtvgarch}}, 
+\code{\link{residuals.mtvgarch}} 
 }
 
 \keyword{Time Varying Parameter Models}

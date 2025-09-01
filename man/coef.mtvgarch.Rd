@@ -45,14 +45,14 @@
   concerning the conditional correlations. "cc" is not valid in plot.mtvgarch().}
   \item{x}{an object of class 'mtvgarch'.}
   \item{as.zoo}{logical. If \code{TRUE}, then the returned result is of class 
-  \code{\link{zoo}}.}
+  \code{\link[zoo]{zoo}}.}
   \item{n.ahead}{integer that determines how many steps ahead predictions 
   should be generated.}
   \item{newxtv}{\code{NULL} or vector with the out-of-sample transition 
   variable. If \code{NULL}, out-of-sample component g equals \code{intercept.g}. 
   Only relevant for TV-GARCH-X models.}
   \item{newxreg}{vector or matrix with the out-of-sample regressor values.}
-  \item{newindex}{\code{zoo}-index for the out-of-sample predictions. If 
+  \item{newindex}{\code{\link[zoo]{zoo}}-index for the out-of-sample predictions. If 
   \code{NULL} (default), then \code{1:n.ahead} is used.}
   \item{n.sim}{integer, the number of simulations.}
   \item{verbose}{logical. If \code{TRUE}, then the simulations - in 
@@ -99,8 +99,8 @@ Software 108, 1-38.
 \code{\link{mtvgarch}}, 
 \code{\link{mtvgarchSim}}, 
 \code{\link{tvgarch}}, 
-\code{\link{garchx}}, 
-\code{\link{zoo}}
+\code{\link[garchx]{garchx}}, 
+\code{\link[zoo]{zoo}}
 }
 
 \examples{

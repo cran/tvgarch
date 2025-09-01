@@ -22,7 +22,7 @@ tvgarch(y, order.g = 1, order.h = c(1,1,0), xtv = NULL, xreg = NULL,
 }
 
 \arguments{
-\item{y}{numeric \code{vector}, time series or \code{\link{zoo}} object.}
+\item{y}{numeric \code{vector}, time series or \code{\link[zoo]{zoo}} object.}
 \item{order.g}{\code{integer} \code{vector} of length s indicating the number of 
 locations in each transition function of the TV component. Indicates whether a 
 stationary GARCH or a nonstationary GARCH, i.e., TV-GARCH, shall be estimated.}
@@ -92,7 +92,7 @@ Software 108, 1-38.
 \author{Susana Campos-Martins}
 
 \seealso{
-\code{\link{garchx}},
+\code{\link[garchx]{garchx}},
 \code{\link{tvgarchSim}},
 \code{\link{nlminb}},
 \code{\link{constrOptim}}

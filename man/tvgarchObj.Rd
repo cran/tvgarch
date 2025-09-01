@@ -25,7 +25,8 @@ TV(s)-GARCH(p,q,r)-X model. Not intended for the average user.
   speed coefficients.}
   \item{location}{\code{NULL} or numeric \code{vector} with the values of the 
   location coefficients.}
-  \item{xtv}{\code{NULL} or numeric \code{vector}, time series or \code{zoo} 
+  \item{xtv}{\code{NULL} or numeric \code{vector}, time series or 
+  \code{\link[zoo]{zoo}} 
   object to include as the transition variable in the TV component. If 
   \code{NULL}, a continuous variable bounded between 0 and 1 for \code{n} 
   observations is constructed and used as the transition variable.}
@@ -39,7 +40,7 @@ TV(s)-GARCH(p,q,r)-X model. Not intended for the average user.
   transition function of the TV component. For function \code{tv()}, it defaults 
   to \code{NULL}.}
   \item{as.zoo}{\code{logical}. If \code{TRUE}, then the returned result is of 
-  class \code{\link{zoo}}.}
+  class \code{\link[zoo]{zoo}}.}
   \item{verbose}{\code{logical}, if \code{TRUE}, the values of not only the 
   logistic transition function but also the transition variable are returned.}
   \item{par.g}{numeric \code{vector} with the values of the parameters in the TV 
@@ -53,9 +54,9 @@ TV(s)-GARCH(p,q,r)-X model. Not intended for the average user.
   parameters fixed in the TV component, i.e., intercept.g.}
   \item{par}{\code{NULL} or numeric \code{vector} with the values of the 
   parameters in the TV-GARCH-X model.}
-  \item{fixed.h}{numeric \code{vector}, time series or \code{\link{zoo}} 
+  \item{fixed.h}{numeric \code{vector}, time series or \code{\link[zoo]{zoo}} 
   containing the values of GARCH-X component).}
-  \item{y}{numeric \code{vector}, time series or \code{\link{zoo}} object.}
+  \item{y}{numeric \code{vector}, time series or \code{\link[zoo]{zoo}} object.}
   \item{iter0}{\code{logical}. If \code{FALSE}, some parameters in the TV 
   component are fixed during the iterative estimation.}
   \item{flag}{\code{integer}. If 0, returns a numeric \code{vector} with the 
@@ -68,7 +69,7 @@ TV(s)-GARCH(p,q,r)-X model. Not intended for the average user.
   asymmetry order of the GARCH-X component.}
   \item{xreg}{numeric \code{vector}, times eries or zoo object to include as 
   covariates in the GARCH-X component.}
-  \item{fixed.g}{numeric \code{vector}, time series or \code{\link{zoo}} 
+  \item{fixed.g}{numeric \code{vector}, time series or \code{\link[zoo]{zoo}} 
   containing the values of TV component).}
   \item{iter.fit.h}{a list of class 'garchx'.}
 }
@@ -80,7 +81,8 @@ The values of the objective function or fitted variance components.
 \author{Susana Campos-Martins}
 
 \seealso{
-\code{\link{tvgarch}}, \code{\link{fitted.tvgarch}}, 
+\code{\link{tvgarch}}, 
+\code{\link{fitted.tvgarch}}, 
 \code{\link{residuals.tvgarch}} 
 }
 

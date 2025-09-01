@@ -20,7 +20,7 @@ tvgarch = FALSE, dcc = FALSE, turbo = TRUE, trace = FALSE)
 }
 
 \arguments{
-\item{y}{numeric matrix, time series or \code{\link{zoo}} object.}
+\item{y}{numeric matrix, time series or \code{\link[zoo]{zoo}} object.}
 \item{order.g}{integer matrix with each row indicating the order.g for each 
 series; number of locations in each transition function of the TV components.}
 \item{order.h}{integer matrix with each row indicating the order.h for each 
@@ -98,7 +98,7 @@ Journal of Business and Economic Statistics 20, 339-350.
 
 \seealso{
 \code{\link{tvgarch}},
-\code{\link{garchx}},
+\code{\link[garchx]{garchx}},
 \code{\link{nlminb}},
 \code{\link{constrOptim}}
 }

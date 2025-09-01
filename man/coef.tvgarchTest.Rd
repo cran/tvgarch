@@ -43,12 +43,12 @@ exception of functions print.tvgarchTest() and summary.tvgarchTest().}
   \item{object}{an object of class 'tvgarchTest'.}
   \item{x}{an object of class 'tvgarchTest'.}
   \item{as.zoo}{logical. If \code{TRUE}, then the returned result is of 
-  class \code{\link{zoo}}.}
+  class \code{\link[zoo]{zoo}}.}
   \item{n.ahead}{integer that determines how many steps ahead predictions 
   should be generated.}
   \item{newxreg}{vector or matrix with the out-of-sample regressor 
   values.}
-  \item{newindex}{a \code{zoo}-index for the out-of-sample predictions. If 
+  \item{newindex}{a \code{\link[zoo]{zoo}}-index for the out-of-sample predictions. If 
   \code{NULL} (default), then \code{1:n.ahead} is used.}
   \item{n.sim}{integer, the number of simulations.}
   \item{verbose}{logical. If \code{TRUE}, then the simulations - in 
@@ -94,7 +94,7 @@ Software 108, 1-38.
 \code{\link{tvgarchTest}}, 
 \code{\link{tvgarchSim}}, 
 \code{\link{tvgarch}}, 
-\code{\link{zoo}}
+\code{\link[zoo]{zoo}}
 }
 
 \examples{

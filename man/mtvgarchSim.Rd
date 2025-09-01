@@ -60,7 +60,7 @@ verbose = FALSE, innovations = NULL)
   should be scaled. If 0, no scaling; if 1, speed/sd(xtv); if 2, exp(speed). 
   Only relevant for TV-GARCH models.}
   \item{as.zoo}{logical. If \code{TRUE}, then the returned result is of 
-  class \code{\link{zoo}}.}
+  class \code{\link[zoo]{zoo}}.}
   \item{verbose}{logical, if \code{TRUE}, the conditional variance and the 
   innovations are also returned.}
   \item{innovations}{\code{NULL} or numeric matrix with the innovations. If 
@@ -76,8 +76,8 @@ verbose = FALSE, innovations = NULL)
 \seealso{
 \code{\link{mtvgarch}},
 \code{\link{tvgarch}},
-\code{\link{garchx}},
-\code{\link{zoo}}
+\code{\link[garchx]{garchx}},
+\code{\link[zoo]{zoo}}
 }
 
 \examples{

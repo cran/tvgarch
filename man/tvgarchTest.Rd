@@ -15,7 +15,7 @@ tvgarchTest(y, xtv = NULL, alpha = 0.05)
 }
 
 \arguments{
-\item{y}{numeric \code{vector}, time series or \code{\link{zoo}} object.}
+\item{y}{numeric \code{vector}, time series or \code{\link[zoo]{zoo}} object.}
 \item{xtv}{\code{NULL} or numeric vector, time series or zoo object to include 
 as the transition variable in the TV component. If \code{NULL}, calendar time 
 scaled between 0 and 1 is used as the transition variable.}
@@ -36,7 +36,7 @@ Econometric Reviews 36:4, 421-446.
 
 \seealso{
 \code{\link{tvgarch}},
-\code{\link{garchx}},
+\code{\link[garchx]{garchx}},
 \code{\link{tvgarchSim}}
 }
 

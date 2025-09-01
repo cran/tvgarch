@@ -29,7 +29,7 @@ tvgarchSim(n, order.g = 1, order.h = c(1,1,0),
   \item{garch}{\code{NULL} or numeric \code{vector} with the values of the GARCH-coefficients.}
   \item{asym}{\code{NULL} or numeric \code{vector} with the values of the asymmetry-coefficients.}
   \item{xreg}{\code{NULL} or numeric \code{vector} with the values of the X-term.}
-  \item{as.zoo}{\code{logical}. If \code{TRUE}, then the returned result is of class \code{\link{zoo}}.}
+  \item{as.zoo}{\code{logical}. If \code{TRUE}, then the returned result is of class \code{\link[zoo]{zoo}}.}
   \item{verbose}{\code{logical}, if \code{TRUE}, the conditional variance and innovations are also returned.}
   \item{innovations}{\code{NULL} or numeric \code{vector} with the innovations. If \code{NULL}, then standard normal innovations are generated with \code{\link{rnorm}}.}
 }
@@ -41,8 +41,8 @@ tvgarchSim(n, order.g = 1, order.h = c(1,1,0),
 
 \seealso{
 \code{\link{tvgarch}},
-\code{\link{garchx}},
-\code{\link{zoo}}
+\code{\link[garchx]{garchx}},
+\code{\link[zoo]{zoo}}
 }
 
 \examples{
