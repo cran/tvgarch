@@ -1,8 +1,14 @@
 tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL, 
                      xreg = NULL, initial.values = list(), opt = 2, 
-                     upper.speed = NULL, tvgarch = FALSE, turbo = FALSE, 
-                     trace = FALSE)
+                     upper.speed = NULL, tvgarch = FALSE,
+                     constrOptim.control = list(),
+                     nlminb.control = list(), maxiter = 2000,
+                     turbo = FALSE, trace = FALSE)
 {
+  ##========================================================
+  ##  Initialise
+  ##========================================================
+
   n <- length(y)
   y.index <- index(y)
   if (!is.null(order.g) && order.g == 0) order.g <- NULL 
@@ -26,9 +32,14 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
     s <- length(order.g)
     npar.g <- 1 + 2 * s + sum(order.g)
   }
-  '
-    Initial values
-  '
+
+  ##========================================================
+  ##  Initial parameter values
+  ##========================================================
+
+  ##  g component:
+  ##--------------
+
   if (!is.null(order.g)) {
     if (is.null(initial.values$intercept.g)) intercept.g <- 1
     else intercept.g <- initial.values$intercept.g
@@ -75,6 +86,10 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
       stop("Mismatch between order.gand the initial location values.")
     }
   }
+  
+  ##  h component: determine orders etc.
+  ##------------------------------------
+  
   if (is.null(initial.values$intercept.h)) intercept.h <- 0.1
   if (!is.null(initial.values$intercept.h)) {
     intercept.h <- initial.values$intercept.h
@@ -112,9 +127,11 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
     }
   }
   if (is.null(xreg)) par.xreg <- NULL
-  '
-    Vector of initial parameters for h component
-  '
+
+
+  ##  h component: initial parameter values
+  ##---------------------------------------
+
   names.h <- c("intercept.h", paste("arch", paste(seq(1:order.h[2]), sep = ""), 
                                     sep = ""))
   ini.par.h <- c(intercept.h, arch)
@@ -144,15 +161,19 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
     cat("\n Initial parameters for the h component\n\n")
     print(round(initial.h, 4))
   }
-  '
-   g component and maximization by parts
-  '
+  
+
+  ##========================================================
+  ##  g component and maximization by parts
+  ##========================================================
+
   g <- y
   g[1:n] <- 1
   if (!is.null(order.g)) {
-    '
-      Vector of initial parameters for g component
-    ' 
+
+    ##  Vector of initial parameters for g component
+    ##----------------------------------------------
+     
     ini.par.g <- c(intercept.g, size, speed, location)
     names.g <- 
       c("intercept.g", paste("size", paste(seq(1:s), sep = ""), sep = ""), 
@@ -179,9 +200,10 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
       cat("\n Initial parameters for the g component:\n\n")
       print(round(initial.g, 4))
     }
-    '
-      Parameter constraints for g component and iter = 0
-    '
+    
+    ##  Parameter constraints for g component and iter = 0
+    ##----------------------------------------------------
+    
     r <- diag(npar.g)
     r1 <- r[1,]
     ui.g <- r1
@@ -215,13 +237,16 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
         ci.g <- c(ci.g, rep(0, order.g[i]-1)) 
       }
     }
-    '
-      Maximization by parts: estimating initial TV parameters
-    '
+
+    ##  Maximization by parts: estimating initial TV parameters
+    ##---------------------------------------------------------
+    
     iter <- 0
     h <- rep(1, n)
     iter0.fit.g <- constrOptim(theta = ini.par.g, f = tvObj, grad = NULL, 
-                               ui = ui.g, ci = ci.g, y = y, order.g = order.g, 
+                               ui = ui.g, ci = ci.g,
+                               control = constrOptim.control,
+                               y = y, order.g = order.g, 
                                xtv = xtv, opt = opt, fixed.h = h, iter0 = TRUE, 
                                flag = 1)
     par.hat0.g <- iter0.fit.g$par
@@ -236,9 +261,10 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
       if (turbo == TRUE) print(round(estimates[1,], 4))
       else print(round(estimates, 4))
     }
-    '
-      Parameter constraints for g component and iter > 0
-    '
+
+    ##  Parameter constraints for g component and iter > 0
+    ##----------------------------------------------------
+    
     par.hat.g <- par.hat0.g[-1]
     par.hat0.g <- par.hat0.g[1]
     r <- diag(length(par.hat.g))
@@ -267,23 +293,31 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
         ci.g <- c(ci.g, rep(0, order.g[i]-1)) 
       }
     }
-    '
-      Iterative estimation
-    '
+    
+
+    ##  Iterative estimation
+    ##----------------------
+    
     iter <- iter + 1
-    maxiter <- 1000 
+    maxiter <- maxiter
+#    OLD:
+#    maxiter <- 1000 
     phi <- y/sqrt(g)
     par.hat.h <- ini.par.h
+    
+    ##start repeat loop:
     repeat{
+
       if (trace == TRUE) {
         cat(" \n\n")
         cat("Iteration round:",iter, "\n\n")
       }
-      '
-        Estimating GJR-GARCH-X parameters:
-      '
+      
+      ##  Estimating GJR-GARCH-X parameters:
       iter.fit.h <- garchx(y = phi, order = order.h, xreg = xreg, 
-                           initial.values = par.hat.h)
+                           initial.values = par.hat.h,
+                           control = nlminb.control,
+                           turbo = TRUE)
       h <- garchxRecursion(pars = as.numeric(iter.fit.h$par), aux = iter.fit.h)
       if (iter > 1) conv.h <- max(abs(par.hat.h-iter.fit.h$par))
       par.hat.h <- iter.fit.h$par
@@ -291,11 +325,12 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
         cat("Estimates (h component):", par.hat.h, "\n")
         cat("Likelihood:", logLik.garchx(iter.fit.h), "\n")
       }
-      '
-        Estimating TV parameters:
-      '
+
+      ##  Estimating TV parameters:
       iter.fit.g <- constrOptim(theta = par.hat.g, f = tvObj, grad = NULL, 
-                                ui = ui.g, ci = ci.g, fixed.par.g = par.hat0.g, 
+                                ui = ui.g, ci = ci.g,
+                                control = constrOptim.control,
+                                fixed.par.g = par.hat0.g, 
                                 y = y, order.g = order.g, xtv = xtv, opt = opt, 
                                 fixed.h = h, iter0 = FALSE, flag = 1)
       conv.g <- max(abs(par.hat.g - iter.fit.g$par))
@@ -304,14 +339,14 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
                       opt = opt, order.g = order.g, fixed.h = h, y = y, 
                       iter0 = FALSE, flag = 2)
       phi <- y/sqrt(g)
+
       if (trace == TRUE) {
         cat("Estimates (g component):", par.hat.g, "\n")
         cat("Likelihood:", - iter.fit.g$value, "\n")
         if (iter > 1) cat("Max. convergence:", max(conv.h, conv.g), "\n")
       }
-      '
-        Next round
-      '
+
+      ##  Next round:
       iter <- iter + 1
       if (iter > 2) {
         if (iter >= maxiter || max(conv.g, conv.h) < 1e-5){
@@ -321,8 +356,10 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
           }
           break
         }
-      }
-    }
+      } #close if (iter > 2){..}
+      
+    } #close repeat{..} loop
+    
     par.hat.g <- c(par.hat0.g, iter.fit.g$par)
     if (turbo == TRUE) {
       vcov.g <- NULL
@@ -358,11 +395,15 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
     rownames(estimates.g) <- c("Estimate:", "Std. Error:")
     colnames(estimates.g) <- names.g
   }
-  '
-    Final GJR-GARCH-X estimation
-  '
+
+
+  ##========================================================
+  ##  Final GJR-GARCH-X estimation
+  ##========================================================
+
   iter.fit.h <- garchx(y = y/sqrt(g), order = order.h, xreg = xreg, 
-                       initial.values = ini.par.h)
+                       initial.values = ini.par.h,
+                       control = nlminb.control)
   aux.h <- iter.fit.h
   h <- garchxRecursion(pars = as.numeric(iter.fit.h$par), aux = iter.fit.h)
   if (turbo == TRUE) {
@@ -370,21 +411,24 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
     robse.par.h <- rep(NA_real_, length(iter.fit.h$par))
   }
   if (turbo == FALSE) {
-    '
-      GJR-GARCH-X variance-covariance matrix:
-    '
+    ##  GJR-GARCH-X variance-covariance matrix:
     vcov.h <- vcov.garchx(iter.fit.h, vcov.type = "robust")
     robse.par.h <- sqrt(diag(vcov.h))
   }
-  '
-    GJR-GARCH-X final parameter estimates:
-  '
+
+
+  ##========================================================
+  ##  GJR-GARCH-X final parameter estimates:
+  ##========================================================
+
   estimates.h <- as.matrix(rbind(iter.fit.h$par, robse.par.h))
   rownames(estimates.h) <- c("Estimate:", "Std. Error:")
   colnames(estimates.h) <- names.h
-  '
-    TV-GJR-GARCH-X final parameter estimates:
-  '
+
+  ##========================================================
+  ##  TV-GJR-GARCH-X final parameter estimates:
+  ##========================================================
+
   if (!is.null(order.g)) {
     par.ini <- c(estimates.g[1,-1],estimates.h[1,])
     r <- diag(length(par.ini))
@@ -393,7 +437,8 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
     ui.gh <- rbind(ui.gh, r[-(1:ncol(ui.g)),])
     ci.gh <- c(ci.gh, rep(0, npar.h)) 
     iter.fit <- constrOptim(theta = par.ini, f = tvgarchObj, grad = NULL, 
-                            ui = ui.gh, ci = ci.gh, 
+                            ui = ui.gh, ci = ci.gh,
+                            control = constrOptim.control,
                             fixed.par.g = par.hat0.g[1], y = y, 
                             order.g = order.g, xtv = xtv, opt = opt, 
                             iter.fit.h = iter.fit.h, flag = 1)
@@ -417,9 +462,12 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
       robse.par <- sqrt(diag(vcov))
     }
   }
-  '
-    TV-GJR-GARCH-X output:
-  '
+  
+
+  ##========================================================
+  ##  TV-GJR-GARCH-X output:
+  ##========================================================
+
   par.h = estimates.h[1,]
   se.h = estimates.h[2,]
   if (!is.null(order.g)) {
@@ -470,7 +518,5 @@ tvgarch <- function (y, order.g = 1, order.h = c(1,1,0), xtv = NULL,
   }
   class(results) <- "tvgarch"
   return(results)
+
 } 
- 
-
-

@@ -29,6 +29,7 @@ export(
 	# main functions: 
 	"tv", "tvgarchSim", "tvgarchTest", "tvObj", "garchObj", "tvgarchObj", 
 	"tvgarch", "mtvgarchSim", "mtvgarch", "combinations", "combos"
+
 )
     
 # methods for class tvgarchTest:

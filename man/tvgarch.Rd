@@ -18,22 +18,26 @@ consistent and asymptotically normal estimates.
 \usage{
 tvgarch(y, order.g = 1, order.h = c(1,1,0), xtv = NULL, xreg = NULL, 
         initial.values = list(), opt = 2, upper.speed = NULL, tvgarch = FALSE,
+        constrOptim.control = list(), nlminb.control = list(), maxiter = 2000,
         turbo = FALSE, trace = FALSE)
 }
 
 \arguments{
 \item{y}{numeric \code{vector}, time series or \code{\link[zoo]{zoo}} object.}
+
 \item{order.g}{\code{integer} \code{vector} of length s indicating the number of 
 locations in each transition function of the TV component. Indicates whether a 
 stationary GARCH or a nonstationary GARCH, i.e., TV-GARCH, shall be estimated.}
+
 \item{order.h}{\code{integer} \code{vector} of the form c(p,q,r). The first 
 entry controls the GARCH order, the second the ARCH order and the third the 
 asymmetry order of the GARCH-X component.}
+
 \item{initial.values}{a list containing the initial parameter values passed on 
-to the optimisation routines (\link{constrOptim} for the TV component and 
-\link{nlminb} for the GARCH-X component). If list(), the default, then the 
-values are chosen automatically. TV component: \code{intercept.g} - \code{NULL} 
-or numeric, \code{size} - \code{NULL} or numeric \code{vector} containing the 
+to the optimisation routines (\code{\link{constrOptim}} for the TV component and
+\code{\link{nlminb}} for the GARCH-X component). If \code{list()}, the default,
+then the values are chosen automatically. TV component: \code{intercept.g} -
+\code{NULL} or numeric, \code{size} - \code{NULL} or numeric \code{vector} containing the 
 size initial coefficients, \code{speed} - \code{NULL} or numeric \code{vector} 
 containing the speed initial coefficients, \code{location} - \code{NULL} or 
 numeric \code{vector} containing the location initial coefficients. GARCH-X or 
@@ -44,23 +48,40 @@ initial coefficients, \code{asym} - \code{NULL} or numeric \code{vector}
 containing the assymetry-type initial coefficients, and \code{par.xreg} - 
 \code{NULL} or numeric \code{vector} containing the X-type initial 
 coefficients.}
+
 \item{xtv}{\code{NULL} or numeric \code{vector}, time series or zoo object to 
 include as the transition variable in the TV component. If \code{NULL}, calendar 
 time, scaled between 0 and 1, is used as the transition variable. Not relevant 
 for stationary GARCH.}
+
 \item{xreg}{numeric \code{vector}, time series or zoo object to include as 
 covariates in the GARCH-X component.}
+
 \item{opt}{\code{integer} indicating whether the speed parameter in the TV 
 component should be scaled. If 0, no scaling; if 1, \code{speed}/sd(\code{xtv}); 
 if 2, exp(\code{speed}). Only relevant for TV-GARCH models.}
+
 \item{upper.speed}{\code{NULL} or numeric \code{scalar} that sets 
 the upper bound for \code{speed} in each transition function. If \code{NULL}, 
 the default, the upper bound is 10000 for all transition functions. 
 If numeric \code{scalar}, \code{upper.speed} is used for all transition 
 functions.}
+
 \item{tvgarch}{\code{logical}. If \code{TRUE}, the full parameter set
 is estimated in one final step as well as the standard errors. If \code{FALSE} 
 (default), estimates from last iteration are reported instead.}
+
+\item{constrOptim.control}{a \code{\link{list}} (the default is \code{list()})
+passed on to the \code{control} argument in \code{\link{constrOptim}}. Enables
+user-specified control of the estimation of the TV component. }
+
+\item{nlminb.control}{a \code{\link{list}} (the default is \code{list()})
+passed on to the \code{control} argument in \code{\link{nlminb}}. Enables
+user-specified control of the estimation of the GARCH-X component. }
+
+\item{maxiter}{the maximum number of estimation by part iterations (the default
+is 2000). }
+
 \item{turbo}{\code{logical}. If \code{FALSE} (default), then the coefficient 
 variance-covariance is computed during estimation, and the fitted values and 
 residuals are attached to the returned object. If \code{TRUE}, then these 
@@ -68,6 +89,7 @@ operations are skipped, and hence estimation is faster. Note, however, that if
 turbo is set to \code{TRUE}, then the coefficient-covariance, fitted values and 
 residuals can still be extracted subsequent to estimation with vcov.tvgarch(), 
 fitted.tvgarch() and residuals.tvgarch(), respectively.}
+
 \item{trace}{\code{logical}. If \code{TRUE} all output is printed when 
 estimating a TV-GARCH.}
 }

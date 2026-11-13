@@ -23,8 +23,8 @@ correlations are allowed.
   \tabular{ll}{
   Package: \tab tvgarch\cr
   Type: \tab Package\cr
-  Version: \tab 2.4.3\cr
-  Date: \tab 2025-09-01 \cr
+  Version: \tab 2.5.0\cr
+  Date: \tab 2026-11-13 \cr
   License: \tab GPL>=2\cr
   }
 }
@@ -43,6 +43,9 @@ decomposition, Journal of Econometrics 175, 142-153.
 Susana Campos-Martins and Genaro Sucarrat (2024) Modeling Nonstationary 
 Financial Volatility with the R Package tvgarch, Journal of Statistical 
 Software 108, 1-38.
+
+Genaro Sucarrat (2021) garchx: Flexible and Robust GARCH-X Modelling,
+The R Journal volume 13, issue 1, pp. 276-291.
 }
 
 \seealso{

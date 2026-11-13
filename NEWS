@@ -1,17 +1,27 @@
+Version 2.5.0 (13 November 2026):
+=================================
+
+* tvgarch():
+- new arguments constrOptim.control, nlminb.control and maxiter
+- minor internal efficiency changes (makes the function ca. 5%-15% faster)
+
+* changes to the documentation files tvgarch.Rd and tvgarch-package.Rd
+
+
 Version 2.4.3 (01 September 2025):
-============================
+==================================
 
 * Missing package anchors added. 
 
 
 Version 2.4.2 (03 April 2024):
-============================
+==============================
 
 * Citation Campos-Martins and Sucarrat (2024) <doi:10.18637/jss.v108.i09> added. 
 
 
 Version 2.4.1 (01 October 2023):
-============================
+================================
 
 * Correction: given version disagreed with the actual package version (meta: 2.4, docs: 2.3).
 
